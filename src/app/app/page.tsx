@@ -14,7 +14,7 @@ export default function ColaboradorForm() {
     const collaborator = {
       name: name,
       office: office,
-      hire_date: new Date(hiringDate),
+      hire_date: new Date(hiringDate).toISOString(),
     };
     setName("");
     setOffice("");

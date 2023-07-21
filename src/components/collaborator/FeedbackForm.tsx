@@ -134,7 +134,6 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({ onSubmit }) => {
         </button>
       </div>
 
-      {/* Feedback Registration Date (FIXED) */}
       <label>
         Feedback Registration Date (FIXED):
         <input

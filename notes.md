@@ -7,3 +7,25 @@ Precisamos criar um sistema web para controle de feedbacks, hoje temos a necessi
 [ ] Deve ser possível visualizar todos os feedbacks em forma de listagem com botões de ação para que seja possível editar/visualizar cada um deles
 [ ] Deve conter na listagem de feedbacks o título, nome do colaborador e data de criação.
 [ ] Deve conter um filtro por colaborador na listagem.
+
+feedback{
+colaborador{
+id,
+name
+}
+title = string
+pauta = string
+Pontos positivos do líder = string
+Pontos negativos do líder = string
+Pontos positivos do Colaborador = string
+Pontos negativos do Colaborador =string
+Data que foi feito o feedback = number
+Data de cadastro do feedback(FIXO) = number
+
+cadastro de nível genérico [{
+title
+nivel que o colaborador si vê
+nivel lider dá a ele
+observação
+}]
+}

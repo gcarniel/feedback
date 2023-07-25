@@ -2,7 +2,7 @@ import { FcFeedback } from "react-icons/fc";
 
 export default function Template({ children }: { children: React.ReactNode }) {
   return (
-    <div className="container mx-auto bg-slate-800 h-screen">
+    <div className="container mx-auto bg-slate-800 h-max">
       <header className="flex items-center justify-between p-4 bg-gray-900 text-white">
         <div className="flex justify-center w-full">
           <div className="flex items-center">

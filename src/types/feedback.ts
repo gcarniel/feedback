@@ -1,7 +1,7 @@
 export interface Feedback {
   id: number;
   collaborator: {
-    id: number;
+    id: string;
     name: string;
   };
   title: string;

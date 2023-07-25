@@ -4,17 +4,14 @@ import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../../firebase/firebaseConfig";
 
 import { FcGoogle } from "react-icons/fc";
-import { useRouter } from "next/router";
 
 export default function Login() {
-  const router = useRouter();
   const handleGoogleSignIn = () => {
     const provider = new GoogleAuthProvider();
 
     signInWithPopup(auth, provider)
       .then((result) => {
         console.log("success", result);
-        router.push("/collaborator-form");
       })
       .catch((error) => {
         console.log("Não foi possível fazer o login", error);

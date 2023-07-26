@@ -10,7 +10,6 @@ export default function ColaboradorForm() {
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    console.log("oi");
     const { name, office, hiringDate } = employee;
 
     try {

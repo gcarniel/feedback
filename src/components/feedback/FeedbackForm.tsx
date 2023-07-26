@@ -11,10 +11,14 @@ import {
   doc,
   DocumentData,
   DocumentReference,
+  updateDoc,
 } from "firebase/firestore";
 
 interface FeedbackFormProps {
   onSubmit: (feedback: Feedback) => void;
+  mode: "edit" | "view";
+  feedbackId: string | null;
+  onClose: () => void;
 }
 
 const getInitialFormState = (): Feedback => ({

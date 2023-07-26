@@ -1,95 +1,59 @@
-// components/ColaboradoresListAndEdit.tsx
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { collection, getDocs, DocumentData } from "firebase/firestore";
+import { db } from "@/firebase/firebaseConfig";
+import ColaboradorForm from "@/app/app/page";
 
-interface Colaborator {
-  id: number;
-  name: string;
-  email: string;
-  // Other fields you want to edit
-}
-
-interface Props {
-  collaborators: Colaborator[];
-}
-
-const ColaboradoresListAndEdit: React.FC<Props> = ({ collaborators }) => {
-  const [selectedCollaborator, setSelectedCollaborator] =
-    useState<Colaborator | null>(null);
-  const [editedCollaborator, setEditedCollaborator] =
-    useState<Colaborator | null>(null);
+const ColaboratorsList = () => {
+  const [collaborators, setCollaborators] = useState<DocumentData[]>([]);
+  const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
-    setEditedCollaborator(selectedCollaborator);
-  }, [selectedCollaborator]);
+    const fetchCollaborators = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "employees"));
+        const collaboratorsData = querySnapshot.docs.map((doc) => doc.data());
+        setCollaborators(collaboratorsData);
+      } catch (error) {
+        console.error("Error fetching collaborators:", error);
+      }
+    };
 
-  const handleEdit = (collaborator: Colaborator) => {
-    setSelectedCollaborator(collaborator);
-  };
+    fetchCollaborators();
+  }, []);
 
-  const handleCancelEdit = () => {
-    setSelectedCollaborator(null);
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (editedCollaborator) {
-      setEditedCollaborator({
-        ...editedCollaborator,
-        [e.target.name]: e.target.value,
-      });
-    }
-  };
-
-  const handleSaveChanges = () => {
-    if (editedCollaborator) {
-      // Here you can implement the logic to save the changes to the collaborator.
-      // For simplicity, we are just updating the collaborator in the local state.
-      setSelectedCollaborator(editedCollaborator);
-    }
+  const handleShowForm = () => {
+    setShowForm(!showForm);
   };
 
   return (
-    <div>
-      <h2>Collaborators List</h2>
+    <div className="colaborators-list-container p-4 border rounded-md max-w-6xl mx-auto mt-8">
+      <h2 className="text-xl font-bold mb-4">Lista de Colaboradores</h2>
       <ul>
         {collaborators.map((collaborator) => (
-          <li key={collaborator.id}>
-            {collaborator.name} - {collaborator.email}
-            <button onClick={() => handleEdit(collaborator)}>Edit</button>
+          <li
+            key={collaborator.id}
+            className="bg-gray-100 p-3 my-2 border rounded-md text-black space-y-2"
+          >
+            <strong className="font-semibold">Nome: </strong>
+            {collaborator.name},
+            <strong className="font-semibold text-black">Cargo: </strong>
+            {collaborator.office},
+            <strong className="font-semibold text-slate-950">
+              Data de Contratação:
+            </strong>
+            {new Date(collaborator.hiringDate).toLocaleDateString()}
           </li>
         ))}
       </ul>
-
-      {selectedCollaborator && (
-        <div>
-          <h2>Edit Collaborator</h2>
-          <p>ID: {selectedCollaborator.id}</p>
-          <form>
-            <label>
-              Name:
-              <input
-                type="text"
-                name="name"
-                value={editedCollaborator?.name || ""}
-                onChange={handleChange}
-              />
-            </label>
-            <label>
-              Email:
-              <input
-                type="text"
-                name="email"
-                value={editedCollaborator?.email || ""}
-                onChange={handleChange}
-              />
-            </label>
-            {/* Add other fields you want to allow editing */}
-          </form>
-          <button onClick={handleCancelEdit}>Cancel</button>
-          <button onClick={handleSaveChanges}>Save Changes</button>
-        </div>
-      )}
+      <button
+        className="bg-teal-600 w-32 border rounded-md  mb-3 mt-3 font-semibold"
+        onClick={handleShowForm}
+      >
+        +Novo
+      </button>
+      {showForm && <ColaboradorForm />}
     </div>
   );
 };
 
-export default ColaboradoresListAndEdit;
+export default ColaboratorsList;

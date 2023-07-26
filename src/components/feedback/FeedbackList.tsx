@@ -58,7 +58,12 @@ const FeedbacksList: React.FC = () => {
     feedback.collaborator?.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleEditFeedback = (feedbackId: string) => {};
+  const handleEditFeedback = (feedbackId: string) => {
+    const selectedFeedback = feedbacks.find(
+      (feedback) => feedback.id === feedbackId
+    );
+    setSelectedFeedback(selectedFeedback || null);
+  };
 
   const handleViewFeedback = (feedbackId: string) => {};
 

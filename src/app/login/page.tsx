@@ -3,15 +3,19 @@
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../../firebase/firebaseConfig";
 
+// import { useRouter } from "next/router";
+
 import { FcGoogle } from "react-icons/fc";
 
 export default function Login() {
+  // const router = useRouter();
   const handleGoogleSignIn = () => {
     const provider = new GoogleAuthProvider();
 
     signInWithPopup(auth, provider)
       .then((result) => {
         console.log("success", result);
+        // router.push("/feedbackForm");
       })
       .catch((error) => {
         console.log("Não foi possível fazer o login", error);

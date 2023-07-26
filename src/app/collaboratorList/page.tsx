@@ -1,9 +1,10 @@
+"use client";
 import React, { useEffect, useState } from "react";
 import { collection, getDocs, DocumentData } from "firebase/firestore";
 import { db } from "@/firebase/firebaseConfig";
-import ColaboradorForm from "@/components/collaborator/ColaboradorForm";
+import ColaboradorForm from "@/components/collaboratorForm/page";
 
-const ColaboratorsList = () => {
+const ColaboratorsList = ({ dynamicParam }: { dynamicParam: string }) => {
   const [collaborators, setCollaborators] = useState<DocumentData[]>([]);
   const [showForm, setShowForm] = useState(false);
 

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { FcFeedback } from "react-icons/fc";
 
 export default function Template({ children }: { children: React.ReactNode }) {

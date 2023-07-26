@@ -1,50 +1,70 @@
 "use client";
-
+import { db } from "@/firebase/firebaseConfig";
+import { collection, addDoc } from "firebase/firestore";
 import { useState } from "react";
 
+const initialNewEmployee = { name: "", office: "", hiringDate: 0 };
+
 export default function ColaboradorForm() {
-  const [name, setName] = useState("");
-  const [office, setOffice] = useState("");
-  const [hiringDate, setHiringDate] = useState("");
+  const [employee, setEmployee] = useState(initialNewEmployee);
 
-  const handleSubmit = (e: { preventDefault: () => void }) => {
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    console.log("cliquei");
+    console.log("oi");
+    const { name, office, hiringDate } = employee;
 
-    const collaborator = {
-      name: name,
-      office: office,
-      hire_date: new Date(hiringDate),
-    };
-    setName("");
-    setOffice("");
-    setHiringDate("");
+    try {
+      const docRef = await addDoc(collection(db, "employees"), {
+        name,
+        office,
+        hiringDate: new Date(hiringDate).getTime(),
+      });
+      setEmployee(initialNewEmployee);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleChange = (e: {
+    target: { name: any; value: any };
+    preventDefault: () => void;
+  }) => {
+    e.preventDefault();
+
+    const { name, value } = e.target;
+    setEmployee((prevEmployee) => ({
+      ...prevEmployee,
+      [name]: value,
+    }));
   };
 
   return (
     <div className="mx-auto">
-      <form className=" m-4 sm:m-8 md:m-16 lg:m-32" onSubmit={handleSubmit}>
+      <form className="m-4 sm:m-8 md:m-16 lg:m-32" onSubmit={handleSubmit}>
         <input
           type="text"
           placeholder="Nome"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          className="flex items-center justify-between mb-4 space-x-2 pl-12 sm:pl-16 pr-4 py-2 border border-gray-300 rounded-md border-none  bg-white"
+          name="name"
+          value={employee.name}
+          onChange={handleChange}
+          className="flex items-center justify-between mb-4 space-x-2 pl-12 sm:pl-16 pr-4 py-2 border border-gray-300 rounded-md border-none bg-white text-black"
         />
 
         <input
           type="text"
           placeholder="Cargo"
-          value={office}
-          onChange={(e) => setOffice(e.target.value)}
-          className="flex items-center justify-between mb-4 space-x-2 pl-12 sm:pl-16 pr-4 py-2 border border-gray-300 rounded-md border-none  bg-white"
+          name="office"
+          value={employee.office}
+          onChange={handleChange}
+          className="flex items-center justify-between mb-4 space-x-2 pl-12 sm:pl-16 pr-4 py-2 border border-gray-300 rounded-md border-none bg-white text-black"
         />
 
         <input
           type="date"
           placeholder="Data de Contratação"
-          value={hiringDate}
-          onChange={(e) => setHiringDate(e.target.value)}
+          name="hiringDate"
+          value={employee.hiringDate}
+          onChange={handleChange}
           className="block px-4 py-2 mb-4 text-gray-700 bg-white border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
         />
         <button

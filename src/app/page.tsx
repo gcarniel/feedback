@@ -1,5 +1,5 @@
 "use client";
-import ColaboradorForm from "./app/page";
+import ColaboradorForm from "../components/collaborator/ColaboradorForm";
 import FeedbackForm from "../components/feedback/FeedbackForm";
 import Login from "./login/page";
 import { Feedback } from "@/types/feedback";
@@ -12,10 +12,10 @@ export default function Home() {
   return (
     <div>
       {user ? (
-        <FeedbackForm
-          onSubmit={function (feedback: Feedback): void {
-            throw new Error("Function not implemented.");
-          }}
+        <FeedbacksList
+        // onSubmit={function (feedback: Feedback): void {
+        //   throw new Error("Function not implemented.");
+        // }}
         />
       ) : (
         <Login />

@@ -12,21 +12,25 @@ export default function Home() {
 
   return (
     <div>
-      {!userLoggedIn && (
-        <li>
-          <Link href={"/login"}></Link>
-          <Login />
-        </li>
-      )}
+      <ul>
+        {" "}
+        {!userLoggedIn && (
+          <li>
+            <Link href={"/login"}>
+              <Login />
+            </Link>
+          </li>
+        )}
+      </ul>
 
       {userLoggedIn ? (
         <FeedbackForm
-          onSubmit={function (feedback: Feedback): void {
+          onSubmit={(feedback: Feedback): void => {
             throw new Error("Function not implemented.");
           }}
-          mode={"view"}
+          mode="view"
           feedbackId={null}
-          onClose={function (): void {
+          onClose={(): void => {
             throw new Error("Function not implemented.");
           }}
         />

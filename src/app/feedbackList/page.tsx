@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import { collection, getDocs, getDoc, doc } from "firebase/firestore";
 import { db } from "@/firebase/firebaseConfig";
 
+import { useRouter } from "next/navigation";
+
 interface Collaborator {
   id: string;
   name: string;
@@ -16,12 +18,11 @@ interface Feedback {
 }
 
 const FeedbacksList: React.FC = () => {
+  const router = useRouter();
+
   const [feedbacks, setFeedbacks] = useState<Feedback[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
-
-  const [selectedFeedback, setSelectedFeedback] = useState<Feedback | null>(
-    null
-  );
+  const [isFormVisible, setIsFormVisible] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchFeedbacks = async () => {
@@ -59,30 +60,81 @@ const FeedbacksList: React.FC = () => {
   );
 
   const handleEditFeedback = (feedbackId: string) => {
-    const selectedFeedback = feedbacks.find(
+    const feedbackToEdit = feedbacks.find(
       (feedback) => feedback.id === feedbackId
     );
-    setSelectedFeedback(selectedFeedback || null);
+
+    if (feedbackToEdit) {
+      setIsFormVisible(true);
+      router.push(`/feedbackForm/Editing/${feedbackId}`);
+      console.log("Editing feedback:", feedbackToEdit);
+    } else {
+      console.log("Feedback not found with ID:", feedbackId);
+    }
+  };
+  const handleViewFeedback = (feedbackId: string) => {
+    const feedbackToView = feedbacks.find(
+      (feedback) => feedback.id === feedbackId
+    );
+
+    if (feedbackToView) {
+      setIsFormVisible(true);
+      router.push(`/feedbackForm/Viewing/${feedbackId}`);
+      console.log("Viewing feedback:", feedbackToView);
+    } else {
+      console.log("Feedback not found with ID:", feedbackId);
+    }
   };
 
-  const handleViewFeedback = (feedbackId: string) => {};
+  useEffect(() => {
+    const fetchFeedbacks = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "feedbacks"));
+        const feedbacksData: Feedback[] = [];
+
+        for (const docRef of querySnapshot.docs) {
+          const feedback = docRef.data() as Feedback;
+          if (feedback.collaborator?.id) {
+            const collaboratorDocRef = doc(
+              db,
+              "employees",
+              feedback.collaborator.id.toString()
+            );
+            const collaboratorSnapshot = await getDoc(collaboratorDocRef);
+            if (collaboratorSnapshot.exists()) {
+              const collaboratorData = collaboratorSnapshot.data();
+              feedback.collaborator.name = collaboratorData?.name || "N/A";
+            }
+          }
+          feedbacksData.push(feedback);
+        }
+
+        setFeedbacks(feedbacksData);
+      } catch (error) {
+        console.log("Error fetching feedbacks:", error);
+      }
+    };
+    fetchFeedbacks();
+  }, []);
 
   return (
-    <div className="max-w-4xl mx-auto mb-4 bg-white rounded-lg shadow-lg p-6 grid gap-4 grid-cols-2">
-      <h2 className="text-xl font-bold col-span-2 mb-4">Lista de Feedbacks</h2>
+    <div className="max-w-4xl mx-auto mb-4 bg-gray-200 rounded-lg shadow-lg p-6 grid gap-4 grid-cols-2">
+      <h2 className="text-2xl text-slate-950 font-bold col-span-2 mb-4 text-center">
+        Lista de Feedbacks
+      </h2>
       <div className="col-span-2 mb-4">
         <input
           type="text"
           placeholder="Pesquisar por nome do colaborador..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="border rounded px-3 py-2 w-full text-gray-950"
+          className="border rounded px-4 py-2 w-full text-gray-800"
         />
       </div>
       {filteredFeedbacks.map((feedback) => (
         <div
           key={feedback.id}
-          className="bg-white rounded-lg shadow p-4 text-slate-900"
+          className="bg-white rounded-lg shadow-md p-4 text-gray-900"
         >
           <strong className="text-black mb-2">Título: </strong>
           {feedback.title}
@@ -94,7 +146,7 @@ const FeedbacksList: React.FC = () => {
           {feedback.registrationDate}
           <br />
 
-          <div className="mt-4">
+          <div className="mt-4 flex justify-center">
             <button
               onClick={() => handleEditFeedback(feedback.id)}
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"

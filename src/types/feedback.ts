@@ -1,5 +1,5 @@
 export interface Feedback {
-  id: number;
+  id?: any;
   collaborator: {
     id: string;
     name: string;

@@ -24,16 +24,18 @@ export default function Home() {
       </ul>
 
       {userLoggedIn ? (
-        <FeedbackForm
-          onSubmit={(feedback: Feedback): void => {
-            throw new Error("Function not implemented.");
-          }}
-          mode="view"
-          feedbackId={null}
-          onClose={(): void => {
-            throw new Error("Function not implemented.");
-          }}
-        />
+        <>
+          <FeedbackForm
+            onSubmit={(): void => {
+              throw new Error("Function not implemented.");
+            }}
+            mode="view"
+            feedbackId={null}
+            onClose={(): void => {
+              throw new Error("Function not implemented.");
+            }}
+          />
+        </>
       ) : null}
     </div>
   );

@@ -28,7 +28,10 @@ const FeedbacksList: React.FC = () => {
     const fetchFeedbacks = async () => {
       try {
         const querySnapshot = await getDocs(collection(db, "feedback"));
-        const feedbacksData: Feedback[] = [];
+        const feedbacks: Feedback[] = querySnapshot.docs.map((doc) => {
+          const data = doc.data() as Feedback;
+          return { ...data, id: doc.id };
+        });
 
         for (const docRef of querySnapshot.docs) {
           const feedback = docRef.data() as Feedback;
@@ -44,10 +47,10 @@ const FeedbacksList: React.FC = () => {
               feedback.collaborator.name = collaboratorData?.name || "N/A";
             }
           }
-          feedbacksData.push(feedback);
+          feedbacks.push(feedback);
         }
 
-        setFeedbacks(feedbacksData);
+        setFeedbacks(feedbacks);
       } catch (error) {
         console.log("Error fetching feedbacks:", error);
       }
@@ -66,7 +69,7 @@ const FeedbacksList: React.FC = () => {
 
     if (feedbackToEdit) {
       setIsFormVisible(true);
-      router.push(`/feedbackForm/Editing/${feedbackId}`);
+      router.push(`/feedbackForm/${feedbackId}`);
       console.log("Editing feedback:", feedbackToEdit);
     } else {
       console.log("Feedback not found with ID:", feedbackId);
@@ -79,43 +82,12 @@ const FeedbacksList: React.FC = () => {
 
     if (feedbackToView) {
       setIsFormVisible(true);
-      router.push(`/feedbackForm/Viewing/${feedbackId}`);
+      router.push(`/feedbackForm/${feedbackId}`);
       console.log("Viewing feedback:", feedbackToView);
     } else {
       console.log("Feedback not found with ID:", feedbackId);
     }
   };
-
-  useEffect(() => {
-    const fetchFeedbacks = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(db, "feedbacks"));
-        const feedbacksData: Feedback[] = [];
-
-        for (const docRef of querySnapshot.docs) {
-          const feedback = docRef.data() as Feedback;
-          if (feedback.collaborator?.id) {
-            const collaboratorDocRef = doc(
-              db,
-              "employees",
-              feedback.collaborator.id.toString()
-            );
-            const collaboratorSnapshot = await getDoc(collaboratorDocRef);
-            if (collaboratorSnapshot.exists()) {
-              const collaboratorData = collaboratorSnapshot.data();
-              feedback.collaborator.name = collaboratorData?.name || "N/A";
-            }
-          }
-          feedbacksData.push(feedback);
-        }
-
-        setFeedbacks(feedbacksData);
-      } catch (error) {
-        console.log("Error fetching feedbacks:", error);
-      }
-    };
-    fetchFeedbacks();
-  }, []);
 
   return (
     <div className="max-w-4xl mx-auto mb-4 bg-gray-200 rounded-lg shadow-lg p-6 grid gap-4 grid-cols-2">

@@ -1,10 +1,8 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 
-export default function Link() {
+export default function Nav() {
   const router = useRouter();
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
 
   const handleNavigateFeedbacks = () => {
     router.push("/feedbackList");
@@ -14,17 +12,17 @@ export default function Link() {
     router.push("/collaboratorList");
   };
 
-  if (!isLoggedIn) {
-    return null;
-  }
+  const handleNavigateFeedbackForm = () => {
+    router.push("/feedbackForm");
+  };
 
   return (
     <nav>
-      <ul className="flex space-x-4 justify-end items-end">
+      <ul className="flex space-x-4 justify-center items-center">
         <li>
           <button
             onClick={handleNavigateFeedbacks}
-            className="text-white hover:text-gray-300"
+            className="text-white hover:text-gray-300 px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600"
           >
             Lista de Feedbacks
           </button>
@@ -32,9 +30,17 @@ export default function Link() {
         <li>
           <button
             onClick={handleNavigateCollaborators}
-            className="text-white hover:text-gray-300"
+            className="text-white hover:text-gray-300 px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600"
           >
             Lista de colaboradores
+          </button>
+        </li>
+        <li>
+          <button
+            onClick={handleNavigateFeedbackForm}
+            className="text-white hover:text-gray-300 px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600"
+          >
+            Formulário de Feedback
           </button>
         </li>
       </ul>

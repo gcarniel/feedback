@@ -14,7 +14,7 @@ export default function Login() {
 
     signInWithPopup(auth, provider)
       .then((result) => {
-        router.push("/feedbackForm");
+        router.push("/links");
         console.log("success", result);
       })
       .catch((error) => {

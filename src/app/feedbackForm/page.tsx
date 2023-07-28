@@ -22,7 +22,7 @@ interface FeedbackFormProps {
 }
 
 const getInitialFormState = (): Feedback => ({
-  id: 0,
+  id: null,
   collaborator: { id: "", name: "" },
   title: "",
   agenda: "",
@@ -111,27 +111,27 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({ onSubmit }) => {
           name: collaboratorData.data().name,
           office: collaboratorData.data().office,
         };
-        setFormData({
-          ...formData,
+        setFormData((prevData) => ({
+          ...prevData,
           collaborator,
-        });
+        }));
         console.log("colaborador encontrado");
       } else {
-        console.log("Collaborator not found!");
+        console.log("Colaborador não encontrado!");
       }
     } catch (error) {
       console.log(error);
     }
   };
+  console.log(fetchedFeedbacks);
 
   useEffect(() => {
     const fetchFeedbacks = async () => {
       try {
         const querySnapshot = await getDocs(collection(db, "feedback"));
-        const feedbacks: Feedback[] = [];
-        querySnapshot.forEach((doc) => {
-          const feedback = doc.data() as Feedback;
-          feedbacks.push(feedback);
+        const feedbacks: Feedback[] = querySnapshot.docs.map((doc) => {
+          const data = doc.data() as Feedback;
+          return { ...data, id: doc.id };
         });
         setFetchedFeedbacks(feedbacks);
       } catch (error) {

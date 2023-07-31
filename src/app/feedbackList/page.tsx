@@ -1,9 +1,17 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { collection, getDocs, getDoc, doc } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  getDoc,
+  doc,
+  deleteDoc,
+} from "firebase/firestore";
 import { db } from "@/firebase/firebaseConfig";
 
 import { useRouter } from "next/navigation";
+import { BsPencil, BsTrash } from "react-icons/bs";
+import { MdContentPaste } from "react-icons/md";
 
 interface Collaborator {
   id: string;
@@ -88,6 +96,20 @@ const FeedbacksList: React.FC = () => {
       console.log("Feedback not found with ID:", feedbackId);
     }
   };
+  const handleDeleteFeedback = async (feedbackId: string) => {
+    try {
+      setFeedbacks((prevFeedbacks) =>
+        prevFeedbacks.filter((feedback) => feedback.id !== feedbackId)
+      );
+
+      const feedbackDocRef = doc(db, "feedback", feedbackId);
+      await deleteDoc(feedbackDocRef);
+
+      console.log("Feedback deleted successfully!");
+    } catch (error) {
+      console.log("Error deleting feedback:", error);
+    }
+  };
 
   return (
     <div className="max-w-4xl mx-auto mb-4 bg-gray-200 rounded-lg shadow-lg p-6 grid gap-4 grid-cols-2">
@@ -121,15 +143,21 @@ const FeedbacksList: React.FC = () => {
           <div className="mt-4 flex justify-center">
             <button
               onClick={() => handleEditFeedback(feedback.id)}
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mr-2 rounded flex items-center"
             >
-              Editar
+              <BsPencil className="mr-2" />
             </button>
             <button
               onClick={() => handleViewFeedback(feedback.id)}
-              className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+              className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 mr-2 rounded flex items-center"
             >
-              Visualizar
+              <MdContentPaste className="mr-2" />
+            </button>
+            <button
+              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 mr-2 rounded flex items-center"
+              onClick={() => handleDeleteFeedback(feedback.id)}
+            >
+              <BsTrash className="mr-2" />
             </button>
           </div>
         </div>

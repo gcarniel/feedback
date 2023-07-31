@@ -37,7 +37,7 @@ export default function FormEdit({ id, params, onSubmit }: FormEditProps) {
     };
 
     fetchFeedbackData();
-  }, [id]);
+  }, [id, params]);
 
   const handleFormSubmit = async (editedFeedbackData: any) => {
     try {
@@ -60,7 +60,7 @@ export default function FormEdit({ id, params, onSubmit }: FormEditProps) {
           feedbackId={id}
           onClose={() => {}}
           id={""}
-          params={undefined}
+          params={params}
         />
       ) : (
         <div>Loading...</div>

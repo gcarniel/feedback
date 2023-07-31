@@ -1,9 +1,16 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { collection, getDocs, DocumentData } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  DocumentData,
+  doc,
+  deleteDoc,
+} from "firebase/firestore";
 import { db } from "@/firebase/firebaseConfig";
 
 import { useRouter } from "next/navigation";
+import { BsPencil, BsTrash } from "react-icons/bs";
 
 const ColaboratorsList = () => {
   const router = useRouter();
@@ -13,7 +20,10 @@ const ColaboratorsList = () => {
     const fetchCollaborators = async () => {
       try {
         const querySnapshot = await getDocs(collection(db, "employees"));
-        const collaboratorsData = querySnapshot.docs.map((doc) => doc.data());
+        const collaboratorsData = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
         setCollaborators(collaboratorsData);
       } catch (error) {
         console.error("Error fetching collaborators:", error);
@@ -27,8 +37,25 @@ const ColaboratorsList = () => {
     router.push("/collaboratorForm");
   };
 
-  const handleEditCollaborator = (collaboratorId: any) => {
+  const handleEditCollaborator = (collaboratorId: string) => {
     router.push(`/collaboratorForm/${collaboratorId}`);
+  };
+
+  const handleDeleteCollaborator = async (collaboratorId: string) => {
+    try {
+      setCollaborators((prevCollaborators) =>
+        prevCollaborators.filter(
+          (collaborator) => collaborator.id !== collaboratorId
+        )
+      );
+
+      const collaboratorDocRef = doc(db, "employees", collaboratorId);
+      await deleteDoc(collaboratorDocRef);
+
+      console.log("Collaborator deleted successfully!");
+    } catch (error) {
+      console.log("Error deleting collaborator:", error);
+    }
   };
 
   return (
@@ -58,12 +85,18 @@ const ColaboratorsList = () => {
               <td className="p-3">
                 {new Date(collaborator.hiringDate).toLocaleDateString()}
               </td>
-              <td className="p-3">
+              <td className="p-3 flex">
                 <button
-                  className="bg-teal-600 w-24 border rounded-md font-semibold mr-2"
+                  className="bg-teal-600 w-24  text-white font-bold py-2 px-4 mr-2 rounded flex items-center"
                   onClick={() => handleEditCollaborator(collaborator.id)}
                 >
-                  Edit
+                  <BsPencil className="mr-2" /> Editar
+                </button>
+                <button
+                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded flex items-center"
+                  onClick={() => handleDeleteCollaborator(collaborator.id)}
+                >
+                  <BsTrash className="mr-2" /> Excluir
                 </button>
               </td>
             </tr>

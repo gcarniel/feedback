@@ -47,37 +47,46 @@ const EditCollaborator = ({ params }: { params: { id: string } }) => {
 
       <form onSubmit={handleFormSubmit}>
         <div className="mb-3">
-          <label htmlFor="name">Nome</label>
+          <label htmlFor="name" className="block mb-1">
+            Nome
+          </label>
           <input
             type="text"
             id="name"
             name="name"
             defaultValue={collaborator.name}
             required
+            className="border rounded-md px-2 py-1 text-slate-950"
           />
         </div>
         <div className="mb-3">
-          <label htmlFor="office">Cargo</label>
+          <label htmlFor="office" className="block mb-1">
+            Cargo
+          </label>
           <input
             type="text"
             id="office"
             name="office"
             defaultValue={collaborator.office}
             required
+            className="border rounded-md px-2 py-1 text-slate-950"
           />
         </div>
         <div className="mb-3">
-          <label htmlFor="hiringDate">Data de Contratação</label>
+          <label htmlFor="hiringDate" className="block mb-1">
+            Data de Contratação
+          </label>
           <input
             type="date"
             id="hiringDate"
             name="hiringDate"
             defaultValue={collaborator.hiringDate}
             required
+            className="border rounded-md px-2 py-1 text-slate-950"
           />
         </div>
         <button
-          className="bg-teal-600 w-32 border rounded-md mb-3 mt-3 font-semibold"
+          className="bg-teal-600 w-32 border rounded-md mb-3 mt-3 font-semibold text-white py-2"
           type="submit"
         >
           Salvar

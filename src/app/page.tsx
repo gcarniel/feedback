@@ -2,7 +2,6 @@
 import { useState } from "react";
 import FeedbackForm from "./feedbackForm/page";
 import Login from "./login/page";
-import { Feedback } from "@/types/feedback";
 import Link from "next/link";
 
 const isUserLoggedIn = false;

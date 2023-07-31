@@ -1,8 +1,9 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import FeedbackForm from "./page";
 import { db } from "@/firebase/firebaseConfig";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
+import FeedbakForm from "../../../components/feedback/feedbakForm";
+import { Feedback } from "@/types/feedback";
 
 interface FormEditProps {
   id: string;
@@ -52,19 +53,17 @@ export default function FormEdit({ id, params, onSubmit }: FormEditProps) {
 
   return (
     <div>
-      {feedbackData ? (
-        <FeedbackForm
-          onSubmit={handleFormSubmit}
-          initialFeedbackData={feedbackData}
-          mode="edit"
-          feedbackId={id}
-          onClose={() => {}}
-          id={""}
-          params={params}
-        />
-      ) : (
-        <div>Loading...</div>
-      )}
+      {" "}
+      <FeedbakForm
+        onSubmit={function (feedback: Feedback): void {
+          throw new Error("Function not implemented.");
+        }}
+        mode={"view"}
+        feedbackId={null}
+        onClose={function (): void {
+          throw new Error("Function not implemented.");
+        }}
+      />
     </div>
   );
 }

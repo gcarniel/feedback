@@ -1,11 +1,11 @@
 "use client";
 
 import EditCollaborator from "@/components/collaborator/collaboratorEdit";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
-const EditCollaboratorPage = () => {
+const EditCollaboratorPage = ({ id, params }: any) => {
+  console.log(params);
   const router = useRouter();
-  const { id } = router.query;
 
   return (
     <div>
@@ -13,5 +13,10 @@ const EditCollaboratorPage = () => {
     </div>
   );
 };
+// export async function getServerSideProps({ query }: any) {
+//   console.log("query", query);
+
+//   return { props: {} };
+// }
 
 export default EditCollaboratorPage;

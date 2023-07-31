@@ -43,6 +43,10 @@ const ColaboratorsList = () => {
     router.push(`/collaboratorForm/${collaboratorId}`);
   };
 
+  const handleViewCollaborator = (collaboratorId: string) => {
+    router.push(`/collaboratorForm/${collaboratorId}`);
+  };
+
   const handleDeleteCollaborator = async (collaboratorId: string) => {
     try {
       setCollaborators((prevCollaborators) =>
@@ -93,7 +97,7 @@ const ColaboratorsList = () => {
                     onClick={() => handleEditCollaborator(collaborator.id)}
                   />
                   <ButtonPreview
-                    onClick={() => handleEditCollaborator(collaborator.id)}
+                    onClick={() => handleViewCollaborator(collaborator.id)}
                   />
                   <ButtonDelete
                     onClick={() => handleDeleteCollaborator(collaborator.id)}

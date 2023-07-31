@@ -31,7 +31,7 @@ const EditCollaborator = ({ params }: { params: { id: string } }) => {
     try {
       const collaboratorRef = doc(db, "employees", params.id);
       await updateDoc(collaboratorRef, formData);
-      router.push("/colaboratorsList");
+      router.push("/collaboratorForm");
     } catch (error) {
       console.error("Error updating collaborator:", error);
     }

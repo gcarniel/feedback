@@ -1,7 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { db } from "@/firebase/firebaseConfig";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
 import FeedbakForm from "../../../components/feedback/feedbakForm";
 import { Feedback } from "@/types/feedback";
 

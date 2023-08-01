@@ -5,7 +5,11 @@ import { useState } from "react";
 
 const initialNewEmployee = { name: "", office: "", hiringDate: 0 };
 
-export default function ColaboradorForm() {
+export default function ColaboradorForm({
+  params,
+}: {
+  params: { id: string };
+}) {
   const [employee, setEmployee] = useState(initialNewEmployee);
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
@@ -38,7 +42,7 @@ export default function ColaboradorForm() {
   };
 
   return (
-    <div className="mx-auto">
+    <div className="flex justify-center items-center">
       <form className="m-4 sm:m-8 md:m-16 lg:m-32" onSubmit={handleSubmit}>
         <input
           type="text"

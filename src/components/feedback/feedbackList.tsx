@@ -149,8 +149,8 @@ const FeedbacksList: React.FC = () => {
           {feedback.registrationDate}
           <br />
           <div className="mt-4 flex justify-center items-center">
-            <ButtonEdit onClick={() => handleViewFeedback(feedback.id)} />
-            <ButtonPreview onClick={() => handleEditFeedback(feedback.id)} />
+            <ButtonEdit onClick={() => handleEditFeedback(feedback.id)} />
+            <ButtonPreview onClick={() => handleViewFeedback(feedback.id)} />
             <ButtonDelete onClick={() => handleDeleteFeedback(feedback.id)} />
           </div>
         </div>

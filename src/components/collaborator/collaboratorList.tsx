@@ -69,47 +69,55 @@ const ColaboratorsList = () => {
       <h2 className="text-xl text-center font-bold mb-4">
         Lista de Colaboradores
       </h2>
-      <table className="w-full">
-        <thead>
-          <tr>
-            <th className="text-left text-slate-950 bg-gray-200 p-3">Nome</th>
-            <th className="text-left text-slate-950 bg-gray-200 p-3">Cargo</th>
-            <th className="text-left text-slate-950 bg-gray-200 p-3">
-              Data de Contratação
-            </th>
-            <th className="text-left text-slate-950 bg-gray-200 p-3">Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          {collaborators.map((collaborator) => (
-            <tr
-              key={collaborator.id}
-              className="text-white border rounded-md space-y-2"
-            >
-              <td className="p-3">{collaborator.name}</td>
-              <td className="p-3">{collaborator.office}</td>
-              <td className="p-3">
-                {new Date(collaborator.hiringDate).toLocaleDateString()}
-              </td>
-              <td className="p-3">
-                <div className="flex items-center justify-center">
-                  <ButtonEdit
-                    onClick={() => handleEditCollaborator(collaborator.id)}
-                  />
-                  <ButtonPreview
-                    onClick={() => handleViewCollaborator(collaborator.id)}
-                  />
-                  <ButtonDelete
-                    onClick={() => handleDeleteCollaborator(collaborator.id)}
-                  />
-                </div>
-              </td>
+      <div className="table-responsive overflow-x-auto">
+        <table className="w-full">
+          <thead>
+            <tr>
+              <th className="text-left text-slate-950 bg-gray-200 p-3 w-1/4 sm:w-1/3 md:w-1/4">
+                Nome
+              </th>
+              <th className="text-left text-slate-950 bg-gray-200 p-3 w-1/4 sm:w-1/3 md:w-1/4">
+                Cargo
+              </th>
+              <th className="text-left text-slate-950 bg-gray-200 p-3 w-1/4 sm:w-1/3 md:w-1/4">
+                Data de Contratação
+              </th>
+              <th className="text-left text-slate-950 bg-gray-200 p-3 w-1/4 sm:w-1/3 md:w-1/4">
+                Ações
+              </th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {collaborators.map((collaborator) => (
+              <tr
+                key={collaborator.id}
+                className="text-white border rounded-md space-y-2"
+              >
+                <td className="p-3">{collaborator.name}</td>
+                <td className="p-3">{collaborator.office}</td>
+                <td className="p-3">
+                  {new Date(collaborator.hiringDate).toLocaleDateString()}
+                </td>
+                <td className="p-3">
+                  <div className="flex items-center justify-center">
+                    <ButtonEdit
+                      onClick={() => handleEditCollaborator(collaborator.id)}
+                    />
+                    <ButtonPreview
+                      onClick={() => handleViewCollaborator(collaborator.id)}
+                    />
+                    <ButtonDelete
+                      onClick={() => handleDeleteCollaborator(collaborator.id)}
+                    />
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
       <button
-        className="bg-teal-600 w-32 border rounded-md mb-3 mt-3 font-semibold"
+        className="bg-teal-600 w-full sm:w-32 border rounded-md mb-3 mt-3 font-semibold"
         onClick={handleShowForm}
       >
         +Novo

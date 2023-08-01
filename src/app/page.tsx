@@ -12,7 +12,6 @@ export default function Home() {
   return (
     <div>
       <ul>
-        {" "}
         {!userLoggedIn && (
           <li>
             <Link href={"/login"}>
@@ -29,10 +28,13 @@ export default function Home() {
               throw new Error("Function not implemented.");
             }}
             mode="view"
-            feedbackId={null}
+            feedbackId={""}
             onClose={(): void => {
               throw new Error("Function not implemented.");
             }}
+            id={""}
+            params={undefined}
+            initialFeedbackData={undefined}
           />
         </>
       ) : null}

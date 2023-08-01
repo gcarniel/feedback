@@ -1,22 +1,34 @@
 "use client";
+import dynamic from "next/dynamic";
 
-import EditCollaborator from "@/components/collaborator/collaboratorEdit";
-import { useRouter } from "next/navigation";
+interface CollaboratorEditProps {
+  id: string;
+  params: any;
+}
 
-const EditCollaboratorPage = ({ id, params }: any) => {
-  console.log(params);
-  const router = useRouter();
+const EditCollaborator = dynamic(
+  () => import("@/components/collaborator/collaboratorEdit"),
+  { ssr: false }
+);
 
+const EditCollaboratorPage = ({ id, params }: CollaboratorEditProps) => {
   return (
     <div>
-      <EditCollaborator params={{ id: id as string }} />
+      <EditCollaborator
+        params={{
+          id: "",
+        }}
+      />
     </div>
   );
 };
-// export async function getServerSideProps({ query }: any) {
-//   console.log("query", query);
 
-//   return { props: {} };
-// }
+export async function getServerSideProps({ query }: any) {
+  return {
+    props: {
+      id: query.id,
+    },
+  };
+}
 
 export default EditCollaboratorPage;

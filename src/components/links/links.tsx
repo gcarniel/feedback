@@ -1,5 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 export default function Links() {
   const router = useRouter();
@@ -44,6 +45,9 @@ export default function Links() {
           </button>
         </li>
       </ul>
+      <div className="flex justify-center items-center mt-24">
+        <Image src="./feedback.svg" width={200} height={200} alt="feedback" />
+      </div>
     </nav>
   );
 }

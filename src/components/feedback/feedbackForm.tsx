@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 import { db } from "@/firebase/firebaseConfig";
 import { collection, addDoc, getDocs, getDoc, doc } from "firebase/firestore";
+import ButtonRegister from "../common/registerButton";
 
 interface FeedbackFormProps {
   onSubmit: (feedback: Feedback) => void;
@@ -428,12 +429,12 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({
             </div>
           </label>
         </div>
-        <button
-          className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-          type="submit"
-        >
-          Enviar
-        </button>
+
+        <ButtonRegister
+          onSubmit={function (feedback: Feedback): void {
+            throw new Error("Function not implemented.");
+          }}
+        />
       </form>
     </div>
   );

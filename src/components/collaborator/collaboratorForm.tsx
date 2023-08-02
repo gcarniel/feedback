@@ -1,9 +1,18 @@
 import { db } from "@/firebase/firebaseConfig";
-import { collection, addDoc, doc, getDoc, getDocs } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  doc,
+  getDoc,
+  getDocs,
+  updateDoc,
+} from "firebase/firestore";
 import { useEffect, useState } from "react";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ButtonRegister from "../common/registerButton";
+import { Feedback } from "@/types/feedback";
 
 interface EditCollaboratorProps {
   collaboratorId: string | null;
@@ -23,11 +32,20 @@ export default function ColaboradorForm({
 
     try {
       const hiringDateValue = new Date(hiringDate).toISOString();
-      const docRef = await addDoc(collection(db, "employees"), {
-        name,
-        office,
-        hiringDate: hiringDateValue,
-      });
+      if (collaboratorId) {
+        const collaboratorRef = doc(db, "employees", collaboratorId);
+        await updateDoc(collaboratorRef, {
+          name,
+          office,
+          hiringDate: hiringDateValue,
+        });
+      } else {
+        const docRef = await addDoc(collection(db, "employees"), {
+          name,
+          office,
+          hiringDate: hiringDateValue,
+        });
+      }
       setEmployee(initialNewEmployee);
       toast.success("Colaborador cadastrado com sucesso!", {
         position: toast.POSITION.TOP_RIGHT,
@@ -53,7 +71,6 @@ export default function ColaboradorForm({
   };
 
   const getCollaboratorId = async () => {
-    console.log("collaboratorId", collaboratorId);
     if (!collaboratorId) {
       return false;
     }
@@ -122,12 +139,17 @@ export default function ColaboradorForm({
           onChange={handleChange}
           className="block px-4 py-2 mb-4 text-gray-700 bg-white border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
         />
-        <button
+        {/* <button
           className="block px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600"
           type="submit"
         >
           Cadastrar
-        </button>
+        </button> */}
+        <ButtonRegister
+          onSubmit={function (feedback: Feedback): void {
+            throw new Error("Function not implemented.");
+          }}
+        />
       </form>
     </div>
   );

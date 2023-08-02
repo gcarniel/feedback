@@ -1,34 +1,17 @@
 "use client";
-import dynamic from "next/dynamic";
+import ColaboradorForm from "@/components/collaborator/collaboratorForm";
 
 interface CollaboratorEditProps {
   id: string;
   params: any;
 }
-
-const EditCollaborator = dynamic(
-  () => import("@/components/collaborator/collaboratorEdit"),
-  { ssr: false }
-);
-
-const EditCollaboratorPage = ({ id, params }: CollaboratorEditProps) => {
+export default function EditCollaboratorPage({
+  params,
+}: CollaboratorEditProps) {
+  console.log(params);
   return (
     <div>
-      <EditCollaborator
-        params={{
-          id: "",
-        }}
-      />
+      <ColaboradorForm collaboratorId={params.id} />
     </div>
   );
-};
-
-export async function getServerSideProps({ query }: any) {
-  return {
-    props: {
-      id: query.id,
-    },
-  };
 }
-
-export default EditCollaboratorPage;

@@ -13,8 +13,7 @@ interface FormEditProps {
   onClose: () => void;
 }
 
-export default function FormEditPage({ id, params, onSubmit }: FormEditProps) {
-  console.log("pageId", id, params);
+export default function FormEditPage({ params, onSubmit }: FormEditProps) {
   return (
     <div>
       {" "}

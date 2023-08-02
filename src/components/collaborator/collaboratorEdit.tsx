@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { collection, doc, getDocs, updateDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  updateDoc,
+} from "firebase/firestore";
 import { db } from "@/firebase/firebaseConfig";
 import { useRouter } from "next/navigation";
 
@@ -12,11 +18,21 @@ const EditCollaborator = () => {
     hiringDate: "",
   });
 
+  const handleFormSubmit = async (formData: any) => {
+    try {
+      const collaboratorRef = doc(db, "employees", collaborator?.id);
+      console.log("Updating collaborator with ID:", collaborator?.id);
+      await updateDoc(collaboratorRef, formData);
+      router.push(`/collaboratorForm/${collaborator?.id}`);
+    } catch (error) {
+      console.error("Error updating collaborator:", error);
+    }
+  };
+
   useEffect(() => {
     const fetchCollaborators = async () => {
       try {
         const querySnapshot = await getDocs(collection(db, "employees"));
-        console.log(querySnapshot);
         const collaboratorsData = querySnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
@@ -28,18 +44,9 @@ const EditCollaborator = () => {
     };
 
     fetchCollaborators();
-  }, []);
 
-  const handleFormSubmit = async (formData: any) => {
-    try {
-      const collaboratorRef = doc(db, "employees", collaborator?.id);
-      console.log("Updating collaborator with ID:", collaborator?.id);
-      await updateDoc(collaboratorRef, formData);
-      router.push(`/collaboratorForm/${collaborator?.id}`);
-    } catch (error) {
-      console.error("Error updating collaborator:", error);
-    }
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;

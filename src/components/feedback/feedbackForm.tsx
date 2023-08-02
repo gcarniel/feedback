@@ -32,7 +32,6 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({
   onSubmit,
   feedbackId,
 }) => {
-  console.log("form", feedbackId);
   const [formData, setFormData] = useState<Feedback>(getInitialFormState());
   const [fetchedFeedbacks, setFetchedFeedbacks] = useState<Feedback[]>([]);
 
@@ -45,6 +44,9 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({
     try {
       const docRef = await addDoc(collection(db, "feedback"), formData);
       console.log("Document ID:", docRef.id);
+      toast.success("Feedback cadastrado com sucesso!", {
+        position: toast.POSITION.TOP_RIGHT,
+      });
       setFormData(getInitialFormState());
       onSubmit(formData);
     } catch (error) {
@@ -81,7 +83,6 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({
   };
 
   const getFeedbackById = async () => {
-    console.log("feedbackId", feedbackId);
     if (!feedbackId) {
       return false;
     }

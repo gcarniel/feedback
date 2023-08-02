@@ -1,14 +1,21 @@
 import { db } from "@/firebase/firebaseConfig";
-import { collection, addDoc } from "firebase/firestore";
-import { useState } from "react";
+import { collection, addDoc, doc, getDoc, getDocs } from "firebase/firestore";
+import { useEffect, useState } from "react";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+interface EditCollaboratorProps {
+  collaboratorId: string | null;
+}
+
 const initialNewEmployee = { name: "", office: "", hiringDate: 0 };
 
-export default function ColaboradorForm() {
+export default function ColaboradorForm({
+  collaboratorId,
+}: EditCollaboratorProps) {
   const [employee, setEmployee] = useState(initialNewEmployee);
+  const [collaborator, setCollaborator] = useState<any>(null);
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
@@ -44,6 +51,46 @@ export default function ColaboradorForm() {
       [name]: value,
     }));
   };
+
+  const getCollaboratorId = async () => {
+    console.log("collaboratorId", collaboratorId);
+    if (!collaboratorId) {
+      return false;
+    }
+    const collaboratorRef = doc(db, "employees", collaboratorId);
+    const collaboratorDoc = await getDoc(collaboratorRef);
+    const collaboratorData = collaboratorDoc.exists()
+      ? collaboratorDoc?.data()
+      : null;
+    if (!collaboratorData) {
+      return;
+    }
+    setEmployee({
+      name: collaboratorData.name,
+      office: collaboratorData.office,
+      hiringDate: collaboratorData.hiringDate,
+    });
+  };
+
+  useEffect(() => {
+    const fetchCollaborators = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "employees"));
+        const collaboratorsData = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setCollaborator(collaboratorsData);
+        setEmployee(initialNewEmployee);
+      } catch (error) {
+        console.error("Error fetching collaborators:", error);
+      }
+    };
+
+    fetchCollaborators();
+    getCollaboratorId();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="flex justify-center items-center">

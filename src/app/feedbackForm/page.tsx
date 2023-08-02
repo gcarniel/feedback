@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 
 import { Feedback } from "@/types/feedback";
-import FeedbackForm from "@/components/feedback/feedbakForm";
+import FeedbackForm from "@/components/feedback/feedbackForm";
 
 interface FormEditProps {
   id: string;

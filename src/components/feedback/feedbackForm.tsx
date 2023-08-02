@@ -5,16 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import { db } from "@/firebase/firebaseConfig";
-import {
-  collection,
-  addDoc,
-  getDocs,
-  getDoc,
-  doc,
-  DocumentData,
-  DocumentReference,
-  updateDoc,
-} from "firebase/firestore";
+import { collection, addDoc, getDocs, getDoc, doc } from "firebase/firestore";
 
 interface FeedbackFormProps {
   onSubmit: (feedback: Feedback) => void;
@@ -37,7 +28,11 @@ const getInitialFormState = (): Feedback => ({
   levels: [],
 });
 
-const FeedbackForm: React.FC<FeedbackFormProps> = ({ onSubmit }) => {
+const FeedbackForm: React.FC<FeedbackFormProps> = ({
+  onSubmit,
+  feedbackId,
+}) => {
+  console.log("form", feedbackId);
   const [formData, setFormData] = useState<Feedback>(getInitialFormState());
   const [fetchedFeedbacks, setFetchedFeedbacks] = useState<Feedback[]>([]);
 
@@ -83,6 +78,35 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({ onSubmit }) => {
         },
       ],
     }));
+  };
+
+  const getFeedbackById = async () => {
+    console.log("feedbackId", feedbackId);
+    if (!feedbackId) {
+      return false;
+    }
+    const feedbackRef = doc(db, "feedback", feedbackId);
+    const feedbackDoc = await getDoc(feedbackRef);
+    const feedback = feedbackDoc.exists() ? feedbackDoc?.data() : null;
+    if (!feedback) {
+      return;
+    }
+    setFormData({
+      id: feedback.id,
+      collaborator: {
+        id: feedback.collaborator.id,
+        name: feedback.collaborator.name,
+      },
+      title: feedback.title,
+      agenda: feedback.agenda,
+      leaderPositivePoints: feedback.leaderPositivePoints,
+      leaderNegativePoints: feedback.leaderNegativePoints,
+      collaboratorPositivePoints: feedback.collaboratorPositivePoints,
+      collaboratorNegativePoints: feedback.collaboratorNegativePoints,
+      feedbackDate: feedback.feedbackDate,
+      registrationDate: feedback.registrationDate,
+      levels: [...(feedback as Feedback).levels],
+    });
   };
 
   const handleRemoveLevel = (index: number) => {
@@ -143,6 +167,8 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({ onSubmit }) => {
       }
     };
     fetchFeedbacks();
+    getFeedbackById();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -303,7 +329,7 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({ onSubmit }) => {
                 <input
                   className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   type="text"
-                  id={`title-${index}`}
+                  id={"title"}
                   value={level.title}
                   onChange={(e) =>
                     handleLevelsChange(index, "title", e.target.value)

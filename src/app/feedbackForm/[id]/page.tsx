@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
-import FeedbakForm from "../../../components/feedback/feedbakForm";
 import { Feedback } from "@/types/feedback";
+import FeedbackForm from "@/components/feedback/feedbackForm";
 
 interface FormEditProps {
   id: string;
@@ -14,15 +14,16 @@ interface FormEditProps {
 }
 
 export default function FormEditPage({ id, params, onSubmit }: FormEditProps) {
+  console.log("pageId", id, params);
   return (
     <div>
       {" "}
-      <FeedbakForm
+      <FeedbackForm
         onSubmit={function (feedback: Feedback): void {
           throw new Error("Function not implemented.");
         }}
         mode={"view"}
-        feedbackId={null}
+        feedbackId={params.id}
         onClose={function (): void {
           throw new Error("Function not implemented.");
         }}

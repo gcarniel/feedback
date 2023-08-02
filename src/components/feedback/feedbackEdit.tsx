@@ -13,6 +13,7 @@ const EditFeedback = ({ params }: { params: { id: string } }) => {
       try {
         const feedbackRef = doc(db, "feedbacks", params.id);
         const feedbackSnapshot = await getDoc(feedbackRef);
+        console.log("feedbackSnapshot:", feedbackSnapshot.data());
         if (feedbackSnapshot.exists()) {
           setFeedback(feedbackSnapshot.data());
         } else {

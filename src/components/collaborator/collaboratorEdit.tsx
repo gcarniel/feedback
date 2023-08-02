@@ -1,11 +1,9 @@
-"use client";
-
 import React, { useEffect, useState } from "react";
 import { collection, doc, getDocs, updateDoc } from "firebase/firestore";
 import { db } from "@/firebase/firebaseConfig";
 import { useRouter } from "next/navigation";
 
-const EditCollaborator = ({ params }: { params: { id: string } }) => {
+const EditCollaborator = () => {
   const router = useRouter();
   const [collaborator, setCollaborator] = useState<any>(null);
   const [formData, setFormData] = useState<any>({
@@ -13,14 +11,12 @@ const EditCollaborator = ({ params }: { params: { id: string } }) => {
     office: "",
     hiringDate: "",
   });
-  const [isViewMode, setIsViewMode] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchCollaborators = async () => {
       try {
-        const querySnapshot = await getDocs(
-          collection(db, "employees", params.id)
-        );
+        const querySnapshot = await getDocs(collection(db, "employees"));
+        console.log(querySnapshot);
         const collaboratorsData = querySnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
@@ -32,19 +28,14 @@ const EditCollaborator = ({ params }: { params: { id: string } }) => {
     };
 
     fetchCollaborators();
-  }, [params.id]);
+  }, []);
 
   const handleFormSubmit = async (formData: any) => {
     try {
-      const collaboratorRef = doc(db, "employees", params.id);
-
-      if (!isViewMode) {
-        console.log("Updating collaborator with ID:", params.id);
-        await updateDoc(collaboratorRef, formData);
-        router.push(`/collaboratorForm/${collaborator?.id}`);
-      } else {
-        router.push(`/collaboratorForm/${collaborator?.id}`);
-      }
+      const collaboratorRef = doc(db, "employees", collaborator?.id);
+      console.log("Updating collaborator with ID:", collaborator?.id);
+      await updateDoc(collaboratorRef, formData);
+      router.push(`/collaboratorForm/${collaborator?.id}`);
     } catch (error) {
       console.error("Error updating collaborator:", error);
     }
@@ -74,11 +65,8 @@ const EditCollaborator = ({ params }: { params: { id: string } }) => {
                 name="name"
                 value={formData?.name || ""}
                 required
-                className={`border rounded-md px-2 py-1 text-slate-950 ${
-                  isViewMode ? "bg-gray-200" : ""
-                }`}
+                className="border rounded-md px-2 py-1 text-slate-950"
                 onChange={handleInputChange}
-                readOnly={isViewMode}
               />
             </div>
             <div className="mb-3">
@@ -91,11 +79,8 @@ const EditCollaborator = ({ params }: { params: { id: string } }) => {
                 name="office"
                 value={formData?.office || ""}
                 required
-                className={`border rounded-md px-2 py-1 text-slate-950 ${
-                  isViewMode ? "bg-gray-200" : ""
-                }`}
+                className="border rounded-md px-2 py-1 text-slate-950"
                 onChange={handleInputChange}
-                readOnly={isViewMode}
               />
             </div>
             <div className="mb-3">
@@ -108,29 +93,15 @@ const EditCollaborator = ({ params }: { params: { id: string } }) => {
                 name="hiringDate"
                 value={formData?.hiringDate || ""}
                 required
-                className={`border rounded-md px-2 py-1 text-slate-950 ${
-                  isViewMode ? "bg-gray-200" : ""
-                }`}
+                className="border rounded-md px-2 py-1 text-slate-950"
                 onChange={handleInputChange}
-                readOnly={isViewMode}
               />
             </div>
-            {!isViewMode && (
-              <button
-                className="bg-teal-600 w-32 border rounded-md mb-3 mt-3 font-semibold text-white py-2"
-                type="submit"
-              >
-                Salvar
-              </button>
-            )}
             <button
-              className={`bg-gray-500 w-32 border rounded-md mb-3 mt-3 font-semibold text-white py-2 ${
-                isViewMode ? "" : "hidden"
-              }`}
-              type="button"
-              onClick={() => setIsViewMode(!isViewMode)}
+              className="bg-teal-600 w-32 border rounded-md mb-3 mt-3 font-semibold text-white py-2"
+              type="submit"
             >
-              {isViewMode ? "Editar" : "Visualizar"}
+              Salvar
             </button>
           </form>
         )}

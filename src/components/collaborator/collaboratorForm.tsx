@@ -1,15 +1,13 @@
-"use client";
 import { db } from "@/firebase/firebaseConfig";
 import { collection, addDoc } from "firebase/firestore";
 import { useState } from "react";
 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const initialNewEmployee = { name: "", office: "", hiringDate: 0 };
 
-export default function ColaboradorForm({
-  params,
-}: {
-  params: { id: string };
-}) {
+export default function ColaboradorForm() {
   const [employee, setEmployee] = useState(initialNewEmployee);
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
@@ -17,23 +15,29 @@ export default function ColaboradorForm({
     const { name, office, hiringDate } = employee;
 
     try {
+      const hiringDateValue = new Date(hiringDate).toISOString();
       const docRef = await addDoc(collection(db, "employees"), {
         name,
         office,
-        hiringDate: new Date(hiringDate).getTime(),
+        hiringDate: hiringDateValue,
       });
       setEmployee(initialNewEmployee);
+      toast.success("Colaborador cadastrado com sucesso!", {
+        position: toast.POSITION.TOP_RIGHT,
+      });
     } catch (error) {
       console.log(error);
+      toast.error(
+        "Erro ao cadastrar colaborador. Por favor, tente novamente.",
+        {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 5000,
+        }
+      );
     }
   };
 
-  const handleChange = (e: {
-    target: { name: any; value: any };
-    preventDefault: () => void;
-  }) => {
-    e.preventDefault();
-
+  const handleChange = (e: { target: { name: any; value: any } }) => {
     const { name, value } = e.target;
     setEmployee((prevEmployee) => ({
       ...prevEmployee,
@@ -43,6 +47,7 @@ export default function ColaboradorForm({
 
   return (
     <div className="flex justify-center items-center">
+      <ToastContainer />
       <form className="m-4 sm:m-8 md:m-16 lg:m-32" onSubmit={handleSubmit}>
         <input
           type="text"

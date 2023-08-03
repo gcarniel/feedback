@@ -201,8 +201,27 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({
             type="button"
             onClick={handleCollaboratorSearch}
           >
-            Buscar Colaborador por Nome
+            Buscar Colaborador por Nome:
           </button>
+        </div>
+
+        <div className="mb-2">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="title"
+          >
+            Nome:
+          </label>
+          <input
+            className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            type="text"
+            id="title"
+            value={formData.collaborator.name}
+            required
+            onChange={(e) =>
+              setFormData({ ...formData, title: e.target.value })
+            }
+          />
         </div>
 
         <div className="mb-2">
@@ -217,6 +236,7 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({
             type="text"
             id="title"
             value={formData.title}
+            required
             onChange={(e) =>
               setFormData({ ...formData, title: e.target.value })
             }
@@ -235,6 +255,7 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({
             type="text"
             id="leaderPositivePoints"
             value={formData.leaderPositivePoints}
+            required
             onChange={(e) =>
               setFormData({ ...formData, leaderPositivePoints: e.target.value })
             }
@@ -253,6 +274,7 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({
             type="text"
             id="leaderNegativePoints"
             value={formData.leaderNegativePoints}
+            required
             onChange={(e) =>
               setFormData({ ...formData, leaderNegativePoints: e.target.value })
             }
@@ -271,6 +293,7 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({
             type="text"
             id="collaboratorPositivePoints"
             value={formData.collaboratorPositivePoints}
+            required
             onChange={(e) =>
               setFormData({
                 ...formData,
@@ -292,6 +315,7 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({
             type="text"
             id="collaboratorNegativePoints"
             value={formData.collaboratorNegativePoints}
+            required
             onChange={(e) =>
               setFormData({
                 ...formData,
@@ -313,6 +337,7 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({
             type="date"
             id="feedbackDate"
             value={formData.feedbackDate}
+            required
             onChange={(e) =>
               setFormData({ ...formData, feedbackDate: e.target.value })
             }
@@ -335,6 +360,7 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({
                   type="text"
                   id={"title"}
                   value={level.title}
+                  required
                   onChange={(e) =>
                     handleLevelsChange(index, "title", e.target.value)
                   }
@@ -352,6 +378,7 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({
                   type="text"
                   id={`collaboratorLevel-${index}`}
                   value={level.collaboratorLevel}
+                  required
                   onChange={(e) =>
                     handleLevelsChange(
                       index,
@@ -373,6 +400,7 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({
                   type="text"
                   id={`leaderLevel-${index}`}
                   value={level.leaderLevel}
+                  required
                   onChange={(e) =>
                     handleLevelsChange(index, "leaderLevel", e.target.value)
                   }
@@ -388,6 +416,7 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({
                 <textarea
                   className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   value={level.observation}
+                  required
                   onChange={(e) =>
                     handleLevelsChange(index, "observation", e.target.value)
                   }

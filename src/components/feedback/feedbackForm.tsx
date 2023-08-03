@@ -134,6 +134,20 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({
     setFormData({ ...formData, registrationDate: e.target.value });
   };
 
+  const handleSelectCollaborator = (selectedCollaborator: Collaborator) => {
+    try {
+      setCollaborator(selectedCollaborator);
+      setFormData((prevState) => ({
+        ...prevState,
+        collaborator: selectedCollaborator,
+      }));
+      toast.success("Colaborador encontrado!");
+    } catch (error) {
+      console.log(error);
+      toast.error("Erro ao buscar colaborador!");
+    }
+  };
+
   useEffect(() => {
     const fetchFeedbacks = async () => {
       try {
@@ -147,20 +161,11 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({
         console.log(error);
       }
     };
+
     fetchFeedbacks();
     getFeedbackById();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const handleSelectCollaborator = (selectedCollaborator: Collaborator) => {
-    try {
-      setCollaborator(selectedCollaborator);
-      toast.success("Colaborador encontrado!");
-    } catch (error) {
-      console.log(error);
-      toast.error("Erro ao buscar colaborador!");
-    }
-  };
 
   return (
     <div>
@@ -180,18 +185,23 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({
         <div className="mb-2">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="title"
+            htmlFor="name"
           >
             Nome:
           </label>
           <input
             className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             type="text"
-            id="title"
+            id="name"
             value={formData.collaborator.name}
-            required
             onChange={(e) =>
-              setFormData({ ...formData, title: e.target.value })
+              setFormData({
+                ...formData,
+                collaborator: {
+                  ...formData.collaborator,
+                  name: e.target.value,
+                },
+              })
             }
           />
         </div>

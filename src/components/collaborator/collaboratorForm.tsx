@@ -9,6 +9,9 @@ import {
 } from "firebase/firestore";
 import { useEffect, useState } from "react";
 
+import { format, parseISO } from "date-fns";
+import { utcToZonedTime, zonedTimeToUtc } from "date-fns-tz";
+
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ButtonRegister from "../common/registerButton";
@@ -18,7 +21,7 @@ interface EditCollaboratorProps {
   collaboratorId: string | null;
 }
 
-const initialNewEmployee = { name: "", office: "", hiringDate: 0 };
+const initialNewEmployee = { name: "", office: "", hiringDate: "" };
 
 export default function ColaboradorForm({
   collaboratorId,
@@ -31,19 +34,27 @@ export default function ColaboradorForm({
     const { name, office, hiringDate } = employee;
 
     try {
-      const hiringDateValue = new Date(hiringDate).toISOString();
+      if (!name || !office || !hiringDate) {
+        return;
+      }
+
+      const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      const hiringDateValue = parseISO(hiringDate);
+      const hiringDateLocal = utcToZonedTime(hiringDateValue, timeZone);
+      const hiringDateUTC = zonedTimeToUtc(hiringDateLocal, timeZone);
+
       if (collaboratorId) {
         const collaboratorRef = doc(db, "employees", collaboratorId);
         await updateDoc(collaboratorRef, {
           name,
           office,
-          hiringDate: hiringDateValue,
+          hiringDate: hiringDateUTC.toISOString(),
         });
       } else {
         const docRef = await addDoc(collection(db, "employees"), {
           name,
           office,
-          hiringDate: hiringDateValue,
+          hiringDate: hiringDateUTC.toISOString(),
         });
       }
       setEmployee(initialNewEmployee);
@@ -66,7 +77,7 @@ export default function ColaboradorForm({
     const { name, value } = e.target;
     setEmployee((prevEmployee) => ({
       ...prevEmployee,
-      [name]: value,
+      [name]: String(value),
     }));
   };
 

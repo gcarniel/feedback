@@ -20,6 +20,7 @@ export default function Links() {
           <button
             onClick={handleNavigateFeedbacks}
             className="text-white hover:text-gray-300 px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600"
+            style={{ width: "150px" }}
           >
             Feedbacks
           </button>
@@ -28,6 +29,7 @@ export default function Links() {
           <button
             onClick={handleNavigateCollaborators}
             className="text-white hover:text-gray-300 px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600"
+            style={{ width: "150px" }}
           >
             Colaboradores
           </button>

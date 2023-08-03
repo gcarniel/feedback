@@ -117,7 +117,7 @@ const ColaboratorsList = () => {
         </table>
       </div>
       <button
-        className="bg-teal-600 w-full sm:w-32 border rounded-md mb-3 mt-3 font-semibold"
+        className="bg-teal-600 w-32 border rounded-md mb-3 mt-3 font-semibold"
         onClick={handleShowForm}
       >
         +Novo

@@ -121,7 +121,7 @@ export default function ColaboradorForm({
   }, []);
 
   return (
-    <div className="max-w-xl mx-auto mb-4  bg-white rounded-lg shadow-lg p-6 ">
+    <div className="max-w-xl mx-auto mb-4  bg-white rounded-lg shadow-lg p-5 ">
       <ToastContainer />
       <form className="m-4 sm:m-8 md:m-16 lg:m-32" onSubmit={handleSubmit}>
         <div className="mb-4">

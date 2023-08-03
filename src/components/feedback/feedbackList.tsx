@@ -117,10 +117,13 @@ const FeedbacksList: React.FC = () => {
       console.log("Error deleting feedback:", error);
     }
   };
+  const handleNavigateFeedbackForm = () => {
+    router.push("/feedbackForm");
+  };
 
   return (
-    <div className="max-w-4xl mx-auto mb-4 bg-gray-800 rounded-lg shadow-lg p-6 grid gap-4 grid-cols-2">
-      <h2 className="text-2xl text-white font-bold col-span-2 mb-4 text-center">
+    <div className="max-w-4xl mx-auto mb-4">
+      <h2 className="text-2xl text-white font-bold mb-4 text-center">
         Lista de Feedbacks
       </h2>
       <div className="col-span-2 mb-4">
@@ -132,29 +135,45 @@ const FeedbacksList: React.FC = () => {
           className="border rounded px-4 py-2 w-full text-gray-800 bg-gray-200"
         />
       </div>
-      {filteredFeedbacks.map((feedback) => (
-        <div
-          key={feedback.id}
-          className="bg-gray-700 rounded-lg shadow-md p-4 text-white"
-        >
-          <strong className="text-white mb-2">Título: </strong>
-          {feedback.title}
-          <br />
-          <strong className="text-white mb-2">
-            Nome do Colaborador:{" "}
-          </strong>{" "}
-          {feedback.collaborator?.name || "N/A"}
-          <br />
-          <strong className="text-white mb-2">Data da Criação: </strong>
-          {feedback.registrationDate}
-          <br />
-          <div className="mt-4 flex justify-center items-center">
-            <ButtonEdit onClick={() => handleEditFeedback(feedback.id)} />
-            <ButtonPreview onClick={() => handleViewFeedback(feedback.id)} />
-            <ButtonDelete onClick={() => handleDeleteFeedback(feedback.id)} />
-          </div>
-        </div>
-      ))}
+      <table className="w-full">
+        <thead>
+          <tr className="bg-gray-800 border text-left text-white">
+            <th className="p-4">Título</th>
+            <th className="p-4">Nome do Colaborador</th>
+            <th className="p-4">Data da Criação</th>
+            <th className="p-4 text-center">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          {filteredFeedbacks.map((feedback, index) => (
+            <tr
+              key={feedback.id}
+              className={`bg-gray-700 border text-white ${
+                index % 2 === 0 ? "bg-opacity-20" : "bg-opacity-10"
+              }`}
+            >
+              <td className="p-4">{feedback.title}</td>
+              <td className="p-4">{feedback.collaborator?.name || "N/A"}</td>
+              <td className="p-4">{feedback.registrationDate}</td>
+              <td className="p-4 flex justify-center items-center">
+                <ButtonEdit onClick={() => handleEditFeedback(feedback.id)} />
+                <ButtonPreview
+                  onClick={() => handleViewFeedback(feedback.id)}
+                />
+                <ButtonDelete
+                  onClick={() => handleDeleteFeedback(feedback.id)}
+                />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <button
+        className="bg-teal-600 w-full sm:w-32 border rounded-md mb-3 mt-3 font-semibold"
+        onClick={handleNavigateFeedbackForm}
+      >
+        +Novo
+      </button>
     </div>
   );
 };

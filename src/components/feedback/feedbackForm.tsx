@@ -187,6 +187,7 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({
           >
             Nome do Colaborador:
           </label>
+
           <input
             className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             type="text"
@@ -194,6 +195,7 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({
             value={collaboratorNameInput}
             onChange={(e) => setCollaboratorNameInput(e.target.value)}
           />
+
           <button
             className="mt-2 inline-block bg-blue-500 text-white font-semibold py-1 px-4 rounded hover:bg-blue-600 focus:outline-none focus:shadow-outline"
             type="button"
@@ -417,7 +419,7 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({
                 className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 type="date"
                 value={formData.registrationDate}
-                onChange={handleRegistrationDateChange} // Use the new change handler
+                onChange={handleRegistrationDateChange}
               />
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                 <svg

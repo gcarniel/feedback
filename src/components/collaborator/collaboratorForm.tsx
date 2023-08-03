@@ -110,41 +110,53 @@ export default function ColaboradorForm({
   }, []);
 
   return (
-    <div className="flex justify-center items-center">
+    <div className="max-w-xl mx-auto mb-4  bg-white rounded-lg shadow-lg p-6 ">
       <ToastContainer />
       <form className="m-4 sm:m-8 md:m-16 lg:m-32" onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Nome"
-          name="name"
-          value={employee.name}
-          onChange={handleChange}
-          className="flex items-center justify-between mb-4 space-x-2 pl-12 sm:pl-16 pr-4 py-2 border border-gray-300 rounded-md border-none bg-white text-black"
-        />
+        <div className="mb-4">
+          <label htmlFor="name" className="block mb-2 text-slate-900">
+            Nome:
+          </label>
+          <input
+            type="text"
+            id="name"
+            placeholder="Digite o nome do funcionário"
+            name="name"
+            value={employee.name}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 text-slate-900 rounded-md focus:outline-none focus:border-blue-500"
+          />
+        </div>
 
-        <input
-          type="text"
-          placeholder="Cargo"
-          name="office"
-          value={employee.office}
-          onChange={handleChange}
-          className="flex items-center justify-between mb-4 space-x-2 pl-12 sm:pl-16 pr-4 py-2 border border-gray-300 rounded-md border-none bg-white text-black"
-        />
+        <div className="mb-4">
+          <label htmlFor="office" className="block mb-2 text-slate-900">
+            Cargo:
+          </label>
+          <input
+            type="text"
+            id="office"
+            placeholder="Digite o cargo do funcionário"
+            name="office"
+            value={employee.office}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 text-slate-900 rounded-md focus:outline-none focus:border-blue-500"
+          />
+        </div>
 
-        <input
-          type="date"
-          placeholder="Data de Contratação"
-          name="hiringDate"
-          value={employee.hiringDate}
-          onChange={handleChange}
-          className="block px-4 py-2 mb-4 text-gray-700 bg-white border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
-        />
-        {/* <button
-          className="block px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600"
-          type="submit"
-        >
-          Cadastrar
-        </button> */}
+        <div className="mb-4">
+          <label htmlFor="hiringDate" className="block mb-2  text-slate-900">
+            Data de Contratação:
+          </label>
+          <input
+            type="date"
+            id="hiringDate"
+            name="hiringDate"
+            value={employee.hiringDate}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 text-slate-900 rounded-md focus:outline-none focus:border-blue-500"
+          />
+        </div>
+
         <ButtonRegister
           onSubmit={function (feedback: Feedback): void {
             throw new Error("Function not implemented.");

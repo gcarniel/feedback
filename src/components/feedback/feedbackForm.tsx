@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { db } from "@/firebase/firebaseConfig";
 import { collection, addDoc, getDocs, getDoc, doc } from "firebase/firestore";
 import ButtonRegister from "../common/registerButton";
+import CollaboratorSelect from "../collaborator/collaboratorSearch";
 
 interface FeedbackFormProps {
   onSubmit: (feedback: Feedback) => void;
@@ -15,6 +16,10 @@ interface FeedbackFormProps {
   onClose: () => void;
 }
 
+interface Collaborator {
+  id: string;
+  name: string;
+}
 const getInitialFormState = (): Feedback => ({
   id: null,
   collaborator: { id: "", name: "" },
@@ -32,12 +37,15 @@ const getInitialFormState = (): Feedback => ({
 const FeedbackForm: React.FC<FeedbackFormProps> = ({
   onSubmit,
   feedbackId,
+  mode,
 }) => {
   const [formData, setFormData] = useState<Feedback>(getInitialFormState());
   const [fetchedFeedbacks, setFetchedFeedbacks] = useState<Feedback[]>([]);
 
   const [collaboratorNameInput, setCollaboratorNameInput] =
     useState<string>("");
+
+  const [collaborator, setCollaborator] = useState<Collaborator | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -126,35 +134,6 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({
     setFormData({ ...formData, registrationDate: e.target.value });
   };
 
-  const handleCollaboratorSearch = async () => {
-    try {
-      const querySnapshot = await getDocs(collection(db, "employees"));
-      const collaboratorData = querySnapshot.docs.find((doc) => {
-        const data = doc.data();
-        return data.name === collaboratorNameInput;
-      });
-      if (collaboratorData) {
-        const collaborator = {
-          id: collaboratorData.id,
-          name: collaboratorData.data().name,
-          office: collaboratorData.data().office,
-        };
-        setFormData((prevData) => ({
-          ...prevData,
-          collaborator,
-        }));
-        console.log("colaborador encontrado");
-        toast.success("Colaborador encontrado!");
-      } else {
-        console.log("Colaborador não encontrado!");
-        toast.error("Colaborador não encontrado!");
-      }
-    } catch (error) {
-      console.log(error);
-      toast.error("Erro ao buscar colaborador!");
-    }
-  };
-
   useEffect(() => {
     const fetchFeedbacks = async () => {
       try {
@@ -173,37 +152,30 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const handleSelectCollaborator = (selectedCollaborator: Collaborator) => {
+    try {
+      setCollaborator(selectedCollaborator);
+      toast.success("Colaborador encontrado!");
+    } catch (error) {
+      console.log(error);
+      toast.error("Erro ao buscar colaborador!");
+    }
+  };
+
   return (
     <div>
       <ToastContainer />
       <form
-        className="max-w-md mx-auto mb-4  bg-white rounded-lg shadow-lg p-6"
+        className="max-w-xl mx-auto mb-4  bg-white rounded-lg shadow-lg p-6"
         onSubmit={handleSubmit}
       >
-        <div className="mb-2">
-          <label
-            className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="collaboratorName"
-          >
-            Nome do Colaborador:
-          </label>
-
-          <input
-            className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            type="text"
-            id="collaboratorName"
-            value={collaboratorNameInput}
-            onChange={(e) => setCollaboratorNameInput(e.target.value)}
-          />
-
-          <button
-            className="mt-2 inline-block bg-blue-500 text-white font-semibold py-1 px-4 rounded hover:bg-blue-600 focus:outline-none focus:shadow-outline"
-            type="button"
-            onClick={handleCollaboratorSearch}
-          >
-            Buscar Colaborador por Nome:
-          </button>
-        </div>
+        {mode !== "edit" && (
+          <div className="mb-2">
+            <CollaboratorSelect
+              onSelectCollaborator={handleSelectCollaborator}
+            />
+          </div>
+        )}
 
         <div className="mb-2">
           <label

@@ -26,7 +26,6 @@ export default function FeedbackFormPage({
         onSubmit={function (feedback: Feedback): void {
           throw new Error("Function not implemented.");
         }}
-        mode={"view"}
         feedbackId={null}
         onClose={function (): void {
           throw new Error("Function not implemented.");

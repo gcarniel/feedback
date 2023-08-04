@@ -1,15 +1,10 @@
 import React, { useEffect, useState } from "react";
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  updateDoc,
-} from "firebase/firestore";
+import { collection, doc, getDocs, updateDoc } from "firebase/firestore";
 import { db } from "@/firebase/firebaseConfig";
 import { useRouter } from "next/navigation";
 
-const EditCollaborator = () => {
+const EditCollaborator = (collaboratorId: any) => {
+  console.log("colaborador", collaboratorId);
   const router = useRouter();
   const [collaborator, setCollaborator] = useState<any>(null);
   const [formData, setFormData] = useState<any>({
@@ -104,12 +99,14 @@ const EditCollaborator = () => {
                 onChange={handleInputChange}
               />
             </div>
-            <button
-              className="bg-teal-600 w-32 border rounded-md mb-3 mt-3 font-semibold text-white py-2"
-              type="submit"
-            >
-              Salvar
-            </button>
+            <div>
+              <button
+                className="bg-teal-600 w-32 border rounded-md mb-3 mt-3 font-semibold text-white py-2"
+                type="submit"
+              >
+                Salvar
+              </button>
+            </div>
           </form>
         )}
       </div>

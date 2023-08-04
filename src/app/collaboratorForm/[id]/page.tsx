@@ -8,7 +8,6 @@ interface CollaboratorEditProps {
 export default function EditCollaboratorPage({
   params,
 }: CollaboratorEditProps) {
-  console.log(params);
   return (
     <div>
       <ColaboradorForm collaboratorId={params.id} />

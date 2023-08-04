@@ -5,7 +5,7 @@ import ColaboradorForm from "@/components/collaborator/collaboratorForm";
 export default function ColaboradorFormPage() {
   return (
     <div>
-      <ColaboradorForm />
+      <ColaboradorForm collaboratorId={null} />
     </div>
   );
 }

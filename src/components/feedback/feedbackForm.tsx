@@ -11,7 +11,6 @@ import CollaboratorSelect from "../collaborator/collaboratorSearch";
 
 interface FeedbackFormProps {
   onSubmit: (feedback: Feedback) => void;
-  mode: "edit" | "view";
   feedbackId: string | null;
   onClose: () => void;
 }
@@ -37,7 +36,6 @@ const getInitialFormState = (): Feedback => ({
 const FeedbackForm: React.FC<FeedbackFormProps> = ({
   onSubmit,
   feedbackId,
-  mode,
 }) => {
   const [formData, setFormData] = useState<Feedback>(getInitialFormState());
   const [fetchedFeedbacks, setFetchedFeedbacks] = useState<Feedback[]>([]);
@@ -174,7 +172,7 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({
         className="max-w-xl mx-auto mb-4  bg-white rounded-lg shadow-lg p-6"
         onSubmit={handleSubmit}
       >
-        {mode !== "edit" && (
+        {!feedbackId && (
           <div className="mb-2">
             <CollaboratorSelect
               onSelectCollaborator={handleSelectCollaborator}

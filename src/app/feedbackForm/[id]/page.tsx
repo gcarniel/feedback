@@ -21,7 +21,6 @@ export default function FormEditPage({ params, onSubmit }: FormEditProps) {
         onSubmit={function (feedback: Feedback): void {
           throw new Error("Function not implemented.");
         }}
-        mode={"view"}
         feedbackId={params.id}
         onClose={function (): void {
           throw new Error("Function not implemented.");

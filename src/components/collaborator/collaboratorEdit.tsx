@@ -3,45 +3,34 @@ import { collection, doc, getDocs, updateDoc } from "firebase/firestore";
 import { db } from "@/firebase/firebaseConfig";
 import { useRouter } from "next/navigation";
 
+interface Collaborator {
+  id: string;
+  name: string;
+  office: string;
+  hiringDate: string;
+}
+
 const EditCollaborator = (collaboratorId: any) => {
-  console.log("colaborador", collaboratorId);
   const router = useRouter();
   const [collaborator, setCollaborator] = useState<any>(null);
-  const [formData, setFormData] = useState<any>({
+  const [formData, setFormData] = useState<Collaborator>({
+    id: "",
     name: "",
     office: "",
     hiringDate: "",
   });
 
-  const handleFormSubmit = async (formData: any) => {
+  const handleFormSubmit = async () => {
     try {
-      const collaboratorRef = doc(db, "employees", collaborator?.id);
-      console.log("Updating collaborator with ID:", collaborator?.id);
-      await updateDoc(collaboratorRef, formData);
-      router.push(`/collaboratorForm/${collaborator?.id}`);
+      const { id, name, office, hiringDate } = formData;
+      const collaboratorRef = doc(db, "employees");
+      console.log("Updating collaborator with ID:");
+      await updateDoc(collaboratorRef, { name, office, hiringDate });
+      router.push(`/collaboratorForm/${id}`);
     } catch (error) {
       console.error("Error updating collaborator:", error);
     }
   };
-
-  useEffect(() => {
-    const fetchCollaborators = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(db, "employees"));
-        const collaboratorsData = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setCollaborator(collaboratorsData);
-      } catch (error) {
-        console.error("Error fetching collaborators:", error);
-      }
-    };
-
-    fetchCollaborators();
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -50,6 +39,25 @@ const EditCollaborator = (collaboratorId: any) => {
       [name]: value,
     });
   };
+
+  useEffect(() => {
+    const fetchCollaborators = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "employees"));
+        const collaborators: Collaborator[] = querySnapshot.docs.map((doc) => {
+          const data = doc.data() as Collaborator;
+          return { ...data, id: doc.id };
+        });
+        setCollaborator(collaborators);
+      } catch (error) {
+        console.error("Error fetching collaborators:", error);
+      }
+    };
+
+    fetchCollaborators();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [collaboratorId]);
 
   return (
     <div className="edit-collaborator-container p-4 border rounded-md max-w-6xl mx-auto mt-8">
@@ -62,10 +70,10 @@ const EditCollaborator = (collaboratorId: any) => {
                 Nome
               </label>
               <input
-                type="text"
+                type="date"
                 id="name"
                 name="name"
-                value={formData?.name || ""}
+                value={formData.name}
                 required
                 className="border rounded-md px-2 py-1 text-slate-950"
                 onChange={handleInputChange}
@@ -79,7 +87,7 @@ const EditCollaborator = (collaboratorId: any) => {
                 type="text"
                 id="office"
                 name="office"
-                value={formData?.office || ""}
+                value={formData.office}
                 required
                 className="border rounded-md px-2 py-1 text-slate-950"
                 onChange={handleInputChange}
@@ -93,7 +101,7 @@ const EditCollaborator = (collaboratorId: any) => {
                 type="date"
                 id="hiringDate"
                 name="hiringDate"
-                value={formData?.hiringDate || ""}
+                value={formData.hiringDate}
                 required
                 className="border rounded-md px-2 py-1 text-slate-950"
                 onChange={handleInputChange}

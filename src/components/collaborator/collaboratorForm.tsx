@@ -75,10 +75,17 @@ export default function ColaboradorForm({
 
   const handleChange = (e: { target: { name: any; value: any } }) => {
     const { name, value } = e.target;
-    setEmployee((prevEmployee) => ({
-      ...prevEmployee,
-      [name]: String(value),
-    }));
+    if (name === "hiringDate") {
+      setEmployee((prevEmployee) => ({
+        ...prevEmployee,
+        [name]: new Date(value),
+      }));
+    } else {
+      setEmployee((prevEmployee) => ({
+        ...prevEmployee,
+        [name]: value,
+      }));
+    }
   };
 
   const getCollaboratorId = async () => {
@@ -121,10 +128,10 @@ export default function ColaboradorForm({
   }, []);
 
   return (
-    <div className="max-w-xl mx-auto mb-4  bg-white rounded-lg shadow-lg p-5 ">
+    <div className="max-w-xl mx-auto mb-4 bg-white rounded-lg shadow-lg p-5">
       <ToastContainer />
       <form className="m-4 sm:m-8 md:m-16 lg:m-32" onSubmit={handleSubmit}>
-        <div className="mb-4">
+        <div className="mb-6">
           <label htmlFor="name" className="block mb-2 text-slate-900">
             Nome:
           </label>
@@ -135,11 +142,11 @@ export default function ColaboradorForm({
             name="name"
             value={employee.name}
             onChange={handleChange}
-            className="w-full px-4 py-2 border border-gray-300 text-slate-900 rounded-md focus:outline-none focus:border-blue-500"
+            className="w-72 px-4 py-2 border border-gray-300 text-slate-900 rounded-md focus:outline-none focus:border-blue-500"
           />
         </div>
 
-        <div className="mb-4">
+        <div className="mb-6">
           <label htmlFor="office" className="block mb-2 text-slate-900">
             Cargo:
           </label>
@@ -150,12 +157,12 @@ export default function ColaboradorForm({
             name="office"
             value={employee.office}
             onChange={handleChange}
-            className="w-full px-4 py-2 border border-gray-300 text-slate-900 rounded-md focus:outline-none focus:border-blue-500"
+            className="w-72 px-4 py-2 border border-gray-300 text-slate-900 rounded-md focus:outline-none focus:border-blue-500"
           />
         </div>
 
-        <div className="mb-4">
-          <label htmlFor="hiringDate" className="block mb-2  text-slate-900">
+        <div className="mb-6">
+          <label htmlFor="hiringDate" className="block mb-2 text-slate-900">
             Data de Contratação:
           </label>
           <input
@@ -164,7 +171,7 @@ export default function ColaboradorForm({
             name="hiringDate"
             value={employee.hiringDate}
             onChange={handleChange}
-            className="w-full px-4 py-2 border border-gray-300 text-slate-900 rounded-md focus:outline-none focus:border-blue-500"
+            className="w-72 px-4 py-2 border border-gray-300 text-slate-900 rounded-md focus:outline-none focus:border-blue-500"
           />
         </div>
 

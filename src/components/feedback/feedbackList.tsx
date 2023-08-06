@@ -135,41 +135,43 @@ const FeedbacksList: React.FC = () => {
           className="border rounded px-4 py-2 w-full text-gray-800 bg-gray-200"
         />
       </div>
-      <table className="w-full">
-        <thead>
-          <tr className="bg-gray-800 border text-left text-white">
-            <th className="p-4">Título</th>
-            <th className="p-4">Nome do Colaborador</th>
-            <th className="p-4">Data da Criação</th>
-            <th className="p-4 text-center">Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredFeedbacks.map((feedback, index) => (
-            <tr
-              key={feedback.id}
-              className={`bg-gray-700 border text-white ${
-                index % 2 === 0 ? "bg-opacity-20" : "bg-opacity-10"
-              }`}
-            >
-              <td className="p-4">{feedback.title}</td>
-              <td className="p-4">{feedback.collaborator?.name || "N/A"}</td>
-              <td className="p-4">{feedback.registrationDate}</td>
-              <td className="p-4 flex justify-center items-center">
-                <ButtonEdit onClick={() => handleEditFeedback(feedback.id)} />
-                <ButtonPreview
-                  onClick={() => handleViewFeedback(feedback.id)}
-                />
-                <ButtonDelete
-                  onClick={() => handleDeleteFeedback(feedback.id)}
-                />
-              </td>
+      <div className="table-responsive overflow-x-auto">
+        <table className="w-full ">
+          <thead>
+            <tr className="bg-gray-800 border text-left text-white">
+              <th className="p-4">Título</th>
+              <th className="p-4">Nome do Colaborador</th>
+              <th className="p-4">Data da Criação</th>
+              <th className="p-4 text-center">Ações</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {filteredFeedbacks.map((feedback, index) => (
+              <tr
+                key={feedback.id}
+                className={`bg-gray-700 border text-white ${
+                  index % 2 === 0 ? "bg-opacity-20" : "bg-opacity-10"
+                }`}
+              >
+                <td className="p-4">{feedback.title}</td>
+                <td className="p-4">{feedback.collaborator?.name || "N/A"}</td>
+                <td className="p-4">{feedback.registrationDate}</td>
+                <td className="p-4 flex justify-center items-center">
+                  <ButtonEdit onClick={() => handleEditFeedback(feedback.id)} />
+                  <ButtonPreview
+                    onClick={() => handleViewFeedback(feedback.id)}
+                  />
+                  <ButtonDelete
+                    onClick={() => handleDeleteFeedback(feedback.id)}
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
       <button
-        className="bg-teal-600 w-full sm:w-32 border rounded-md mb-3 mt-3 font-semibold"
+        className="bg-teal-600 w-full sm:w-auto border rounded-md mb-3 mt-3 font-semibold px-4 py-2"
         onClick={handleNavigateFeedbackForm}
       >
         +Novo

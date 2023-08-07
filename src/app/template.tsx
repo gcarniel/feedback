@@ -10,7 +10,7 @@ export default function Template({ children }: { children: React.ReactNode }) {
           <h1 className="text-lg font-bold text-center">Feedback Flow</h1>
         </div>
       </header>
-      <div className="p-24">{children}</div>
+      <div className="p-28">{children}</div>
     </div>
   );
 }

@@ -78,7 +78,7 @@ export default function ColaboradorForm({
     if (name === "hiringDate") {
       setEmployee((prevEmployee) => ({
         ...prevEmployee,
-        [name]: new Date(value),
+        [name]: value,
       }));
     } else {
       setEmployee((prevEmployee) => ({
@@ -116,7 +116,10 @@ export default function ColaboradorForm({
           ...doc.data(),
         }));
         setCollaborator(collaboratorsData);
-        setEmployee(initialNewEmployee);
+        setEmployee((prevEmployee) => ({
+          ...prevEmployee,
+          hiringDate: prevEmployee.hiringDate || "",
+        }));
       } catch (error) {
         console.error("Error fetching collaborators:", error);
       }

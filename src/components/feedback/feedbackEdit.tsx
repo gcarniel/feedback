@@ -29,8 +29,7 @@ const EditFeedback = ({ params }: { params: { id: string } }) => {
 
   const handleFormSubmit = async (formData: any) => {
     try {
-      const feedbackRef = doc(db, "feedbacks", params.id);
-      console.log("Updating feedback with ID:", params.id);
+      const feedbackRef = doc(db, "feedbacks");
       await updateDoc(feedbackRef, formData);
       router.push(`/feedbackForm/${feedback?.id}`);
     } catch (error) {

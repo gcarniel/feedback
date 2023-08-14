@@ -148,6 +148,9 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({
 
   useEffect(() => {
     const fetchFeedbacks = async () => {
+      if (feedbackId) {
+        getFeedbackById();
+      }
       try {
         const querySnapshot = await getDocs(collection(db, "feedback"));
         const feedbacks: Feedback[] = querySnapshot.docs.map((doc) => {

@@ -7,7 +7,7 @@ interface Collaborator {
   id: string;
   name: string;
   office: string;
-  hiringDate: string;
+  hiringDate: string | Date;
 }
 
 const EditCollaborator = (collaboratorId: any) => {
@@ -34,6 +34,7 @@ const EditCollaborator = (collaboratorId: any) => {
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
+    console.log(value);
     setFormData({
       ...formData,
       [name]: value,
@@ -46,6 +47,7 @@ const EditCollaborator = (collaboratorId: any) => {
         const querySnapshot = await getDocs(collection(db, "employees"));
         const collaborators: Collaborator[] = querySnapshot.docs.map((doc) => {
           const data = doc.data() as Collaborator;
+          data.hiringDate = new Date(data.hiringDate);
           return { ...data, id: doc.id };
         });
         setCollaborator(collaborators);
@@ -101,7 +103,7 @@ const EditCollaborator = (collaboratorId: any) => {
                 type="date"
                 id="hiringDate"
                 name="hiringDate"
-                value={formData.hiringDate}
+                value={formData.hiringDate as string}
                 required
                 className="border rounded-md px-2 py-1 text-slate-950"
                 onChange={handleInputChange}

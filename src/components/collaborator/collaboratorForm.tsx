@@ -26,7 +26,7 @@ const initialNewEmployee = { name: "", office: "", hiringDate: "" };
 export default function ColaboradorForm({
   collaboratorId,
 }: EditCollaboratorProps) {
-  const [employee, setEmployee] = useState(initialNewEmployee);
+  const [employee, setEmployee] = useState<any>(initialNewEmployee);
   const [collaborator, setCollaborator] = useState<any>(null);
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
@@ -75,13 +75,14 @@ export default function ColaboradorForm({
 
   const handleChange = (e: { target: { name: any; value: any } }) => {
     const { name, value } = e.target;
+    console.log(value);
     if (name === "hiringDate") {
-      setEmployee((prevEmployee) => ({
+      setEmployee((prevEmployee: any) => ({
         ...prevEmployee,
         [name]: value,
       }));
     } else {
-      setEmployee((prevEmployee) => ({
+      setEmployee((prevEmployee: any) => ({
         ...prevEmployee,
         [name]: value,
       }));
@@ -103,7 +104,9 @@ export default function ColaboradorForm({
     setEmployee({
       name: collaboratorData.name,
       office: collaboratorData.office,
-      hiringDate: collaboratorData.hiringDate,
+      hiringDate: collaboratorData.hiringDate
+        ? format(new Date(collaboratorData.hiringDate), "yyyy-MM-dd")
+        : "",
     });
   };
 
@@ -116,7 +119,7 @@ export default function ColaboradorForm({
           ...doc.data(),
         }));
         setCollaborator(collaboratorsData);
-        setEmployee((prevEmployee) => ({
+        setEmployee((prevEmployee: any) => ({
           ...prevEmployee,
           hiringDate: prevEmployee.hiringDate || "",
         }));

@@ -16,6 +16,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ButtonRegister from "../common/registerButton";
 import { Feedback } from "@/types/feedback";
+import ButtonSave from "../common/saveButton";
 
 interface EditCollaboratorProps {
   collaboratorId: string | null;
@@ -180,12 +181,11 @@ export default function ColaboradorForm({
             className="w-72 px-4 py-2 border border-gray-300 text-slate-900 rounded-md focus:outline-none focus:border-blue-500"
           />
         </div>
-
-        <ButtonRegister
-          onSubmit={function (feedback: Feedback): void {
-            throw new Error("Function not implemented.");
-          }}
-        />
+        {collaboratorId ? (
+          <ButtonSave onClick={function (): void {}} />
+        ) : (
+          <ButtonRegister onSubmit={function (feedback: Feedback): void {}} />
+        )}
       </form>
     </div>
   );

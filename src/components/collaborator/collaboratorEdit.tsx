@@ -1,7 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { collection, doc, getDocs, updateDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  updateDoc,
+} from "firebase/firestore";
 import { db } from "@/firebase/firebaseConfig";
 import { useRouter } from "next/navigation";
+import { Feedback } from "@/types/feedback";
+import SaveButton from "../common/saveButton";
+import { toast } from "react-toastify";
 
 interface Collaborator {
   id: string;
@@ -10,7 +19,9 @@ interface Collaborator {
   hiringDate: string | Date;
 }
 
-const EditCollaborator = (collaboratorId: any) => {
+const EditCollaborator: React.FC<{ collaboratorId: string }> = ({
+  collaboratorId,
+}) => {
   const router = useRouter();
   const [collaborator, setCollaborator] = useState<any>(null);
   const [formData, setFormData] = useState<Collaborator>({
@@ -23,10 +34,10 @@ const EditCollaborator = (collaboratorId: any) => {
   const handleFormSubmit = async () => {
     try {
       const { id, name, office, hiringDate } = formData;
-      const collaboratorRef = doc(db, "employees");
-      console.log("Updating collaborator with ID:");
+      const collaboratorRef = doc(db, "employees", id);
       await updateDoc(collaboratorRef, { name, office, hiringDate });
       router.push(`/collaboratorForm/${id}`);
+      toast.success("Colaborador salvo com sucesso!");
     } catch (error) {
       console.error("Error updating collaborator:", error);
     }
@@ -44,28 +55,26 @@ const EditCollaborator = (collaboratorId: any) => {
   useEffect(() => {
     const fetchCollaborators = async () => {
       try {
-        const querySnapshot = await getDocs(collection(db, "employees"));
-        const collaborators: Collaborator[] = querySnapshot.docs.map((doc) => {
-          const data = doc.data() as Collaborator;
+        const collaboratorRef = doc(db, "employees", collaboratorId);
+        const collaboratorSnapshot = await getDoc(collaboratorRef);
+        if (collaboratorSnapshot.exists()) {
+          const data = collaboratorSnapshot.data() as Collaborator;
           data.hiringDate = new Date(data.hiringDate);
-          return { ...data, id: doc.id };
-        });
-        setCollaborator(collaborators);
+          setFormData(data);
+        }
       } catch (error) {
-        console.error("Error fetching collaborators:", error);
+        console.error("Error fetching collaborator:", error);
       }
     };
 
     fetchCollaborators();
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [collaboratorId]);
 
   return (
     <div className="edit-collaborator-container p-4 border rounded-md max-w-6xl mx-auto mt-8">
       <h2 className="text-xl text-center font-bold mb-4">Editar Colaborador</h2>
       <div className="mt-14 flex justify-center items-center">
-        {collaborator && (
+        {!collaborator && (
           <form onSubmit={handleFormSubmit}>
             <div className="mb-3">
               <label htmlFor="name" className="block mb-1">
@@ -109,14 +118,7 @@ const EditCollaborator = (collaboratorId: any) => {
                 onChange={handleInputChange}
               />
             </div>
-            <div>
-              <button
-                className="bg-teal-600 w-32 border rounded-md mb-3 mt-3 font-semibold text-white py-2"
-                type="submit"
-              >
-                Salvar
-              </button>
-            </div>
+            <SaveButton onClick={handleFormSubmit} />
           </form>
         )}
       </div>

@@ -8,6 +8,7 @@ import { db } from "@/firebase/firebaseConfig";
 import { collection, addDoc, getDocs, getDoc, doc } from "firebase/firestore";
 import ButtonRegister from "../common/registerButton";
 import CollaboratorSelect from "../collaborator/collaboratorSearch";
+import ButtonSave from "../common/saveButton";
 
 interface FeedbackFormProps {
   onSubmit: (feedback: Feedback) => void;
@@ -443,12 +444,11 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({
             </div>
           </label>
         </div>
-
-        <ButtonRegister
-          onSubmit={function (feedback: Feedback): void {
-            throw new Error("Function not implemented.");
-          }}
-        />
+        {feedbackId ? (
+          <ButtonSave onClick={function (): void {}} />
+        ) : (
+          <ButtonRegister onSubmit={function (feedback: Feedback): void {}} />
+        )}
       </form>
     </div>
   );

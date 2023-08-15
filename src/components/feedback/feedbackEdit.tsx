@@ -3,6 +3,10 @@ import React, { useEffect, useState } from "react";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "@/firebase/firebaseConfig";
 import { useRouter } from "next/navigation";
+import ButtonRegister from "../common/registerButton";
+import { Feedback } from "@/types/feedback";
+import SaveButton from "../common/saveButton";
+import { toast } from "react-toastify";
 
 const EditFeedback = ({ params }: { params: { id: string } }) => {
   const router = useRouter();
@@ -32,6 +36,7 @@ const EditFeedback = ({ params }: { params: { id: string } }) => {
       const feedbackRef = doc(db, "feedbacks");
       await updateDoc(feedbackRef, formData);
       router.push(`/feedbackForm/${feedback?.id}`);
+      toast.success("Feedback salvo com sucesso!");
     } catch (error) {
       console.error("Error updating feedback:", error);
     }
@@ -41,7 +46,7 @@ const EditFeedback = ({ params }: { params: { id: string } }) => {
     <div className="edit-feedback-container p-4 border rounded-md max-w-6xl mx-auto mt-8">
       <h2 className="text-xl text-center font-bold mb-4">Editar Feedback</h2>
       {feedback !== null ? (
-        <form onSubmit={handleFormSubmit}>
+        <form>
           <div className="mb-3">
             <label htmlFor="content" className="block mb-1">
               Conteúdo
@@ -56,12 +61,7 @@ const EditFeedback = ({ params }: { params: { id: string } }) => {
               cols={50}
             />
           </div>
-          <button
-            className="bg-teal-600 w-32 border rounded-md mb-3 mt-3 font-semibold text-white py-2"
-            type="submit"
-          >
-            Salvar
-          </button>
+          <SaveButton onClick={() => handleFormSubmit(feedback)} />
         </form>
       ) : (
         <p>Carregando...</p>

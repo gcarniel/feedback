@@ -1,14 +1,7 @@
 import React, { useEffect, useState } from "react";
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  updateDoc,
-} from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "@/firebase/firebaseConfig";
 import { useRouter } from "next/navigation";
-import { Feedback } from "@/types/feedback";
 import SaveButton from "../common/saveButton";
 import { toast } from "react-toastify";
 
@@ -31,7 +24,8 @@ const EditCollaborator: React.FC<{ collaboratorId: string }> = ({
     hiringDate: "",
   });
 
-  const handleFormSubmit = async () => {
+  const saveCollaboratorsChanges = async () => {
+    console.log("salvei");
     try {
       const { id, name, office, hiringDate } = formData;
       const collaboratorRef = doc(db, "employees", id);
@@ -75,7 +69,7 @@ const EditCollaborator: React.FC<{ collaboratorId: string }> = ({
       <h2 className="text-xl text-center font-bold mb-4">Editar Colaborador</h2>
       <div className="mt-14 flex justify-center items-center">
         {!collaborator && (
-          <form onSubmit={handleFormSubmit}>
+          <form onSubmit={saveCollaboratorsChanges}>
             <div className="mb-3">
               <label htmlFor="name" className="block mb-1">
                 Nome
@@ -118,7 +112,7 @@ const EditCollaborator: React.FC<{ collaboratorId: string }> = ({
                 onChange={handleInputChange}
               />
             </div>
-            <SaveButton onClick={handleFormSubmit} />
+            <SaveButton onClick={saveCollaboratorsChanges} />
           </form>
         )}
       </div>

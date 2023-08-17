@@ -1,30 +1,21 @@
 "use client";
 import React from "react";
-import { Feedback } from "@/types/feedback";
 import FeedbackForm from "@/components/feedback/feedbackForm";
+import { Feedback } from "@/types/feedback";
 
 interface FormEditProps {
-  id: string;
-  params: any;
-  onSubmit: (editedFeedbackData: any) => void;
-  initialFeedbackData: any;
-  mode: string;
-  feedbackId: string;
-  onClose: () => void;
+  params: {
+    id: string;
+  };
 }
 
-export default function FormEditPage({ params, onSubmit }: FormEditProps) {
+export default function FormEditPage({ params }: FormEditProps) {
   return (
     <div>
-      {" "}
       <FeedbackForm
-        onSubmit={function (feedback: Feedback): void {
-          throw new Error("Function not implemented.");
-        }}
         feedbackId={params.id}
-        onClose={function (): void {
-          throw new Error("Function not implemented.");
-        }}
+        onSubmit={function (feedback: Feedback): void {}}
+        onClose={function (): void {}}
       />
     </div>
   );

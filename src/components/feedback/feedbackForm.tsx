@@ -5,7 +5,14 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import { db } from "@/firebase/firebaseConfig";
-import { collection, addDoc, getDocs, getDoc, doc } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  getDocs,
+  getDoc,
+  doc,
+  updateDoc,
+} from "firebase/firestore";
 import ButtonRegister from "../common/registerButton";
 import CollaboratorSelect from "../collaborator/collaboratorSearch";
 import ButtonSave from "../common/saveButton";
@@ -40,9 +47,8 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({
 }) => {
   const [formData, setFormData] = useState<Feedback>(getInitialFormState());
   const [fetchedFeedbacks, setFetchedFeedbacks] = useState<Feedback[]>([]);
-
-  const [collaboratorNameInput, setCollaboratorNameInput] =
-    useState<string>("");
+  const [existingFeedbackData, setExistingFeedbackData] =
+    useState<Feedback | null>(null);
 
   const [collaborator, setCollaborator] = useState<Collaborator | null>(null);
 
@@ -50,13 +56,35 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({
     e.preventDefault();
 
     try {
-      const docRef = await addDoc(collection(db, "feedback"), formData);
-      console.log("Document ID:", docRef.id);
-      toast.success("Feedback cadastrado com sucesso!", {
-        position: toast.POSITION.TOP_RIGHT,
-      });
-      setFormData(getInitialFormState());
-      onSubmit(formData);
+      let docRef;
+
+      if (feedbackId) {
+        await updateDoc(doc(db, "feedback", feedbackId), formData);
+        docRef = feedbackId;
+      } else {
+        docRef = await addDoc(collection(db, "feedback"), formData);
+      }
+
+      console.log("Document ID:", docRef);
+      toast.success(
+        feedbackId
+          ? "Feedback atualizado com sucesso!"
+          : "Feedback cadastrado com sucesso!",
+        {
+          position: toast.POSITION.TOP_RIGHT,
+        }
+      );
+
+      if (!feedbackId) {
+        setFormData(getInitialFormState());
+        setCollaborator(null);
+      }
+
+      const mergedFormData = feedbackId
+        ? { ...existingFeedbackData, ...formData }
+        : formData;
+
+      onSubmit(mergedFormData);
     } catch (error) {
       console.log(error);
     }
@@ -149,9 +177,6 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({
 
   useEffect(() => {
     const fetchFeedbacks = async () => {
-      if (feedbackId) {
-        getFeedbackById();
-      }
       try {
         const querySnapshot = await getDocs(collection(db, "feedback"));
         const feedbacks: Feedback[] = querySnapshot.docs.map((doc) => {
@@ -159,15 +184,24 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({
           return { ...data, id: doc.id };
         });
         setFetchedFeedbacks(feedbacks);
+
+        if (feedbackId) {
+          await getFeedbackById();
+          setExistingFeedbackData({
+            ...formData,
+            levels: formData.levels.map((level) => ({ ...level })),
+          });
+        } else {
+          setExistingFeedbackData(null);
+        }
       } catch (error) {
         console.log(error);
       }
     };
 
     fetchFeedbacks();
-    getFeedbackById();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [feedbackId]);
 
   return (
     <div>

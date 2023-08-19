@@ -52,7 +52,7 @@ const EditFeedback = ({ feedbackId, params }: EditFeedbackProps) => {
   return (
     <div className="edit-feedback-container p-4 border rounded-md max-w-6xl mx-auto mt-8">
       <h2 className="text-xl text-center font-bold mb-4">Editar Feedback</h2>
-      {!feedback !== null ? (
+      {feedback !== null ? (
         <form>
           <div className="mb-3">
             <label htmlFor="content" className="block mb-1">
